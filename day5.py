@@ -41,4 +41,27 @@ puzzle_input = open("day5.txt", "r")
 puzzle_input = puzzle_input.read()
 puzzle_input = [int(num) for num in puzzle_input.split("\n")]
 
-print steps_to_exit(puzzle_input)
+# print steps_to_exit(puzzle_input)
+
+# --- Part Two ---
+
+# Now, the jumps are even stranger: after each jump, if the offset was three or more, instead decrease it by 1. Otherwise, increase it by 1 as before.
+
+# Using this rule with the above example, the process now takes 10 steps, and the offset values after finding the exit are left as 2 3 2 3 -1.
+
+# How many steps does it now take to reach the exit?
+
+def more_steps_to_exit(instructions):
+    steps = 0
+    i = 0
+    while i < len(instructions):
+        j = i
+        i += instructions[j]
+        if instructions[j] >= 3:
+            instructions[j] -= 1
+        else:
+            instructions[j] += 1
+        steps += 1
+    return steps
+
+print more_steps_to_exit(puzzle_input)
