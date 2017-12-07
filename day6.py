@@ -20,11 +20,11 @@
 
 # Given the initial block counts in your puzzle input, how many redistribution cycles must be completed before a configuration is produced that has been seen before?
 
-puzzle_input = """5	1	10	0	1	7	13	14	3	12	8	10	7	12	0	6"""
-
 test_input = """0   2   7   0"""
 
-input_list = [int(num) for num in test_input.split()]
+puzzle_input = """5	1	10	0	1	7	13	14	3	12	8	10	7	12	0	6"""
+
+input_list = [int(num) for num in puzzle_input.split()]
 
 import math
 
@@ -41,8 +41,6 @@ def redistribute(some_input):
 
 configurations = []
 
-# def add_config():
-
 def detect_loop(configuration):
     global configurations
     while True:
@@ -50,9 +48,8 @@ def detect_loop(configuration):
         if configuration not in configurations:
             configurations.append(list(configuration))
         else:
-            break
-    return len(configurations) + 1
-    
+            return len(configurations) + 1
+
 print detect_loop(input_list)
 
 # --- Part Two ---
@@ -64,12 +61,6 @@ print detect_loop(input_list)
 # How many cycles are in the infinite loop that arises from the configuration in your puzzle input?
 
 def re_detect(configuration):
-    global configurations
-    configurations = [list(configuration)]
-    redistribute(configuration)
-    if configuration not in configurations:
-            configurations.append(list(configuration))
-    detect_loop(configuration)
-    return len(configurations)
+    return len(configurations) - configurations.index(configuration)
 
 print re_detect(input_list)
