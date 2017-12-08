@@ -20,6 +20,10 @@
 
 # What is the largest value in any register after completing the instructions in your puzzle input?
 
+# --- Part Two ---
+
+# To be safe, the CPU also needs to know the highest value held in any register during this process so that it can decide how much memory to allocate to these operations. For example, in the above instructions, the highest value ever held was 10 (in register c after the third instruction was evaluated).
+
 test_instructions = '''b inc 5 if a > 1
 a inc 1 if b < 5
 c dec -10 if a >= 1
@@ -52,9 +56,12 @@ def setup(some_list):
 
 def run_instructions(some_list):
     setup(some_list)
+    max_value_ever = 0
     for instruction in instructions_list:
         if eval(instruction[instruction.index(' if') + 4:]) == True:
             exec(instruction[0:instruction.index(' if') + 1])
-    return max(reg_values.values())
+            if max(reg_values.values()) > max_value_ever:
+                max_value_ever = max(reg_values.values())
+    return max(reg_values.values()), max_value_ever
 
 print run_instructions(instructions_list)
