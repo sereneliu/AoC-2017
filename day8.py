@@ -57,7 +57,7 @@ def setup(some_list):
 def run_instructions(some_list):
     setup(some_list)
     max_value_ever = 0
-    for instruction in instructions_list:
+    for instruction in some_list:
         if eval(instruction[instruction.index(' if') + 4:]) == True:
             exec(instruction[0:instruction.index(' if') + 1])
             if max(reg_values.values()) > max_value_ever:
