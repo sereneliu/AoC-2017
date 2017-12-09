@@ -56,31 +56,35 @@
 # <{o"i!a,<{i<a>, 10 characters.
 # How many non-canceled characters are within the garbage in your puzzle input?
 
+import re
+
 puzzle_input = open("day9.txt", "r")
 puzzle_input = puzzle_input.read()
 
 def remove_garbage(some_input):
-    garbage_characters = 0
-    while "!" in some_input:
-        some_input = some_input[0:some_input.index("!")] + some_input[some_input.index("!") + 2:]
-    while "<" in some_input:
-        garbage_characters += len(some_input[some_input.index("<") + 1:some_input.index(">")])
-        some_input = some_input[0:some_input.index("<")] + some_input[some_input.index(">") + 1:]
-    print garbage_characters
-    return some_input
+    garbage_counts = 0
+    garbage_pattern = re.compile(r'<((?:[^!>]|!.)*)>', re.MULTILINE)
+    ignore_pattern = re.compile(r'!.', re.MULTILINE)
+    def count_garbage(match):
+        inner_garbage = match.group(1)
+        real_garbage = ignore_pattern.sub('', inner_garbage)
+        nonlocal garbage_counts
+        garbage_counts += len(real_garbage)
+        return ''
+    cleaned = garbage_pattern.sub(count_garbage, some_input)
+    print(garbage_counts)
+    return cleaned
 
 def score_groups(some_input):
     input_wo_garbage = remove_garbage(some_input)
     total_score = 0
     score = 0
-    i = 0
-    for i in range(len(input_wo_garbage)):
-        if input_wo_garbage[i] == "{":
+    for c in input_wo_garbage:
+        if c == "{":
             score += 1
             total_score += score
-        elif input_wo_garbage[i] == "}":
+        elif c == "}":
             score -= 1
-        i += 1
     return total_score
 
-print score_groups(puzzle_input)
+print(score_groups(puzzle_input))
