@@ -73,14 +73,12 @@ def score_groups(some_input):
     input_wo_garbage = remove_garbage(some_input)
     total_score = 0
     score = 0
-    i = 0
     for i in range(len(input_wo_garbage)):
         if input_wo_garbage[i] == "{":
             score += 1
             total_score += score
         elif input_wo_garbage[i] == "}":
             score -= 1
-        i += 1
     return total_score
 
 print score_groups(puzzle_input)
