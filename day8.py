@@ -24,44 +24,30 @@
 
 # To be safe, the CPU also needs to know the highest value held in any register during this process so that it can decide how much memory to allocate to these operations. For example, in the above instructions, the highest value ever held was 10 (in register c after the third instruction was evaluated).
 
-test_instructions = '''b inc 5 if a > 1
-a inc 1 if b < 5
-c dec -10 if a >= 1
-c inc -20 if c == 10'''
+from collections import defaultdict
+import operator
 
-puzzle_input = open('day8.txt', 'r')
-puzzle_input = puzzle_input.read()
-instructions_list = puzzle_input.split('\n')
+functions = {
+    'inc': operator.add,
+    'dec': operator.sub
+}
 
-registers = set()
-reg_values = {}
+conditions = {
+    '<':  operator.lt,
+    '<=': operator.le,
+    '>':  operator.gt,
+    '>=': operator.ge,
+    '==': operator.eq,
+    '!=': operator.ne,
+}
 
-def setup(some_list):
-    for instruction in some_list:
-        i = some_list.index(instruction)
-        instruction = instruction.split()
-        register = instruction[0]
-        registers.add(register)
-        instruction[0] = 'reg_values["' + register + '"]'
-        register_2 = instruction[4]
-        instruction[4] = 'reg_values["' + register_2 + '"]'
-        if instruction[1] == 'inc':
-            instruction[1] = '+='
-        if instruction[1] == 'dec':
-            instruction[1] = '-='
-        instruction = ' '.join(instruction)
-        some_list[i] = instruction
-    for register in registers:
-        reg_values.update({register: 0})
+regs = defaultdict(int)
+max_value = 0
 
-def run_instructions(some_list):
-    setup(some_list)
-    max_value_ever = 0
-    for instruction in some_list:
-        if eval(instruction[instruction.index(' if') + 4:]) == True:
-            exec(instruction[0:instruction.index(' if') + 1])
-            if max(reg_values.values()) > max_value_ever:
-                max_value_ever = max(reg_values.values())
-    return max(reg_values.values()), max_value_ever
-
-print run_instructions(instructions_list)
+with open('day8.txt') as input_file:
+    for line in input_file:
+        reg, func, val, _, cond_reg, cond, cond_val = line.split()
+        if conditions[cond](regs[cond_reg], int(cond_val)):
+            regs[reg] = functions[func](regs[reg], int(val))
+            max_value = max(max_value, regs[reg])
+print(max(regs.values()), max_value)
