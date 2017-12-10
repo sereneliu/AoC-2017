@@ -1,3 +1,7 @@
+from __future__ import print_function
+import functools
+import operator
+
 # --- Day 10: Knot Hash ---
 
 # You come across some programs that are trying to implement a software emulation of a hash based on knot-tying. The hash these programs are implementing isn't very strong, but you decide to help them anyway. You make a mental note to remind the Elves later not to invent their own cryptographic functions.
@@ -35,48 +39,22 @@
 
 # However, you should instead use the standard list size of 256 (with values 0 to 255) and the sequence of lengths in your puzzle input. Once this process is complete, what is the result of multiplying the first two numbers in the list?
 
-test_list = [0, 1, 2, 3, 4]
-test_lengths = [3, 4, 1, 5]
-
-# [0, 1, 2, 3, 4]
-# [2, 1, 0, 3, 4]
-# [4, 3, 0, 1, 2]
-# [4, 3, 0, 1, 2]
-# [3, 4, 2, 1, 0]
-
-puzzle_list = list(range(256))
 puzzle_input = '''88,88,211,106,141,1,78,254,2,111,77,255,90,0,54,205'''
-puzzle_lengths = [int(num) for num in puzzle_input.split(",")]
 
-pos = 0
-skip = 0
+def twist_and_skip(values, length, skip):
+    twisted = values[length:] + values[length-1::-1] if length > 0 else values
+    return twisted[skip:] + twisted[:skip]
 
-def a_knot_hash_round(some_list, some_length):
-    global pos
-    global skip
-    for length in some_length:
-        reversed_elements = []
-        if length <= len(some_list[pos:]):
-            i = some_list[pos:pos + length]
-        else:
-            i = some_list[pos:] + some_list[0:length - len(some_list[pos:])]
-        if i != []:
-            for element in reversed(i):
-                reversed_elements.append(element)
-        j = pos
-        for element in reversed_elements:
-            some_list[j] = element
-            if j < len(some_list) - 1:
-                j += 1
-            else:
-                j = 0
-        pos += (length + skip)
-        pos = pos % len(some_list)
-        skip += 1
-#    print some_list[0] * some_list[1]
-    return some_list
+def knots(lengths, size=256):
+    values, rotated = list(range(size)), 0
+    for skip, length in enumerate(lengths):
+        values = twist_and_skip(values, length, skip % size)
+        rotated = (rotated + length + skip) % size
+    return values[-rotated:] + values[:-rotated]
 
-# print a_knot_hash_round(puzzle_list, puzzle_lengths)
+assert knots([3, 4, 1, 5], size=5) == [3, 4, 2, 1, 0]
+part1_output = knots(int(num) for num in puzzle_input.split(','))
+print(part1_output[0] * part1_output[1])
 
 # --- Part Two ---
 
@@ -105,31 +83,16 @@ def a_knot_hash_round(some_list, some_length):
 # 1,2,4 becomes 63960835bcdc130f0b66d7ff4f6a5a8e.
 # Treating your puzzle input as a string of ASCII characters, what is the Knot Hash of your puzzle input? Ignore any leading or trailing whitespace you might encounter.
 
-def dense_hash(list_of_num):
-    x = list_of_num[0]
-    for i in range(len(list_of_num) - 1):
-        x = x ^ list_of_num[i + 1]
-    return x
+def knot_hash(key):
+    values = knots(([ord(c) for c in key] + [17, 31, 73, 47, 23]) * 64)
+    return ''.join(
+        '{0:02x}'.format(functools.reduce(operator.xor,
+            (values[j] for j in range(i, i + 16))))
+        for i in range(0, len(values), 16)
+    )
 
-def knot_hash(some_list, some_length):
-    global pos
-    global skip
-    some_length = [ord(c) for c in some_length] + [17, 31, 73, 47, 23]
-    for n in range(64):
-        sparse_hash = a_knot_hash_round(some_list, some_length)
-    dense_hash_result = []
-    i = 0
-    while i < len(sparse_hash):
-        dense_hash_result.append(dense_hash(sparse_hash[i:i + 16]))
-        i += 16
-    final_hash = []
-    for num in dense_hash_result:
-        final_hash.append('%02x' % num)
-    return "".join(final_hash)
-    
-# print knot_hash(puzzle_list, '')
-# print knot_hash(puzzle_list, 'AoC 2017')
-# print knot_hash(puzzle_list, '1,2,3')
-# print knot_hash(puzzle_list, '1,2,4')
-
-print knot_hash(puzzle_list, puzzle_input)
+assert knot_hash('') == 'a2582a3a0e66e6e86e3812dcb672a272'
+assert knot_hash('AoC 2017') == '33efeb34ea91902bb2f59c9920caa6cd'
+assert knot_hash('1,2,3') == '3efbe78a8d82f29979031a4aa0b16a9d'
+assert knot_hash('1,2,4') == '63960835bcdc130f0b66d7ff4f6a5a8e'
+print(knot_hash(puzzle_input))
