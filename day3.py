@@ -87,21 +87,24 @@ def spiral_value(some_input):
         for i in range(steps):
             if value <= some_input:
                 x += 1
-                values[(x, y)] = sum(values.get(xy, 0) for xy in [(x + 1, y), (x + 1, y + 1), (x, y + 1), (x - 1, y + 1), (x - 1, y), (x - 1, y - 1), (x, y - 1), (x + 1, y - 1)])
+                value = sum(values.get(xy, 0) for xy in [(x + 1, y), (x + 1, y + 1), (x, y + 1), (x - 1, y + 1), (x - 1, y), (x - 1, y - 1), (x, y - 1), (x + 1, y - 1)])
+                values[(x, y)] = value
         for i in range(steps):
             if value <= some_input:
                 y += 1
-                values[(x, y)] = sum(values.get(xy, 0) for xy in [(x + 1, y), (x + 1, y + 1), (x, y + 1), (x - 1, y + 1), (x - 1, y), (x - 1, y - 1), (x, y - 1), (x + 1, y - 1)])
+                value = sum(values.get(xy, 0) for xy in [(x + 1, y), (x + 1, y + 1), (x, y + 1), (x - 1, y + 1), (x - 1, y), (x - 1, y - 1), (x, y - 1), (x + 1, y - 1)])
+                values[(x, y)] = value
         steps += 1
         for i in range(steps):
             if value <= some_input:
                 x -= 1
-                value = values.get((x + 1, y), 0) + values.get((x + 1, y + 1), 0) + values.get((x, y + 1), 0) + values.get((x - 1, y + 1), 0) + values.get((x - 1, y), 0) + values.get((x - 1, y - 1), 0) + values.get((x, y - 1), 0) + values.get((x + 1, y - 1), 0)
-                values.update({(x, y): value})
+                value = sum(values.get(xy, 0) for xy in [(x + 1, y), (x + 1, y + 1), (x, y + 1), (x - 1, y + 1), (x - 1, y), (x - 1, y - 1), (x, y - 1), (x + 1, y - 1)])
+                values[(x, y)] = value
         for i in range(steps):
             if value <= some_input:
                 y -= 1
-                values[(x, y)] = sum(values.get(xy, 0) for xy in [(x + 1, y), (x + 1, y + 1), (x, y + 1), (x - 1, y + 1), (x - 1, y), (x - 1, y - 1), (x, y - 1), (x + 1, y - 1)])
+                value = sum(values.get(xy, 0) for xy in [(x + 1, y), (x + 1, y + 1), (x, y + 1), (x - 1, y + 1), (x - 1, y), (x - 1, y - 1), (x, y - 1), (x + 1, y - 1)])
+                values[(x, y)] = value
         steps += 1
     return value
     
