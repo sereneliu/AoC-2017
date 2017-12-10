@@ -105,12 +105,6 @@ def a_knot_hash_round(some_list, some_length):
 # 1,2,4 becomes 63960835bcdc130f0b66d7ff4f6a5a8e.
 # Treating your puzzle input as a string of ASCII characters, what is the Knot Hash of your puzzle input? Ignore any leading or trailing whitespace you might encounter.
 
-def turn_into_ascii(some_input):
-    ascii_input = []
-    for c in some_input:
-        ascii_input.append(ord(c))
-    return ascii_input
-
 def dense_hash(list_of_num):
     x = list_of_num[0]
     for i in range(len(list_of_num) - 1):
@@ -120,7 +114,7 @@ def dense_hash(list_of_num):
 def knot_hash(some_list, some_length):
     global pos
     global skip
-    some_length = turn_into_ascii(some_length) + [17, 31, 73, 47, 23]
+    some_length = [ord(c) for c in some_length] + [17, 31, 73, 47, 23]
     for n in range(64):
         sparse_hash = a_knot_hash_round(some_list, some_length)
     dense_hash_result = []
