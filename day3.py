@@ -19,43 +19,44 @@
 # Data from square 1024 must be carried 31 steps.
 # How many steps are required to carry the data from the square identified in your puzzle input all the way to the access port?
 
-puzzle_input = 289326
-
+from __future__ import division, print_function
+from collections import defaultdict
+import itertools
 import math
 
-# Only works for puzzle input, not the other test cases... still have to think about this...
-# def manh_dist(some_input):
-#    return math.ceil((some_input - (int(math.sqrt(some_input)) ** 2)) % (math.sqrt(some_input) / 2)) + int(math.sqrt(some_input)) / 2
+puzzle_input = 289326
 
-# print manh_dist(puzzle_input)
+def manh_dist(some_input):
+    ring = math.trunc(math.ceil(math.sqrt(some_input))) // 2
+    side = (some_input - (2 * ring - 1) ** 2) % (2 * ring)
+    return ring + abs(side - ring)
 
-def spiral(some_input):
-    x = 0
-    y = 0
+print(manh_dist(puzzle_input))
+
+def spiral_generator():
+    x, y = 0, 0
+    yield (x, y)
     steps = 1
-    num = 0
-    while num < some_input:
-        for i in range(steps):
-            if num < some_input:
-                x += 1
-                num += 1
-        for i in range(steps):
-            if num < some_input:
-                y += 1
-                num += 1
+    while True:
+        for _ in range(steps):
+            x += 1
+            yield (x, y)
+        for _ in range(steps):
+            y += 1
+            yield (x, y)
         steps += 1
-        for i in range(steps):
-            if num < some_input:
-                x -= 1
-                num += 1
-        for i in range(steps):
-            if num < some_input:
-                y -= 1
-                num += 1
+        for _ in range(steps):
+            x -= 1
+            yield (x, y)
+        for _ in range(steps):
+            y -= 1
+            yield (x, y)
         steps += 1
-    return abs(x) + abs(y) - 1
-    
-print spiral(puzzle_input)
+
+for i, (x, y) in enumerate(spiral_generator(), start=1):
+    if i == puzzle_input:
+        print(abs(x) + abs(y))
+        break
 
 # --- Part Two ---
 
@@ -77,32 +78,22 @@ print spiral(puzzle_input)
 # 362  747  806--->   ...
 # What is the first value written that is larger than your puzzle input?
 
-def spiral_value(some_input):
-    x = 0
-    y = 0
-    steps = 1
-    value = 0
-    values = {(0, 0): 1}
-    while value <= some_input:
-        for i in range(steps):
-            if value <= some_input:
-                x += 1
-                values[(x, y)] = sum(values.get(xy, 0) for xy in [(x + 1, y), (x + 1, y + 1), (x, y + 1), (x - 1, y + 1), (x - 1, y), (x - 1, y - 1), (x, y - 1), (x + 1, y - 1)])
-        for i in range(steps):
-            if value <= some_input:
-                y += 1
-                values[(x, y)] = sum(values.get(xy, 0) for xy in [(x + 1, y), (x + 1, y + 1), (x, y + 1), (x - 1, y + 1), (x - 1, y), (x - 1, y - 1), (x, y - 1), (x + 1, y - 1)])
-        steps += 1
-        for i in range(steps):
-            if value <= some_input:
-                x -= 1
-                value = values.get((x + 1, y), 0) + values.get((x + 1, y + 1), 0) + values.get((x, y + 1), 0) + values.get((x - 1, y + 1), 0) + values.get((x - 1, y), 0) + values.get((x - 1, y - 1), 0) + values.get((x, y - 1), 0) + values.get((x + 1, y - 1), 0)
-                values.update({(x, y): value})
-        for i in range(steps):
-            if value <= some_input:
-                y -= 1
-                values[(x, y)] = sum(values.get(xy, 0) for xy in [(x + 1, y), (x + 1, y + 1), (x, y + 1), (x - 1, y + 1), (x - 1, y), (x - 1, y - 1), (x, y - 1), (x + 1, y - 1)])
-        steps += 1
-    return value
-    
-print spiral_value(puzzle_input)
+def neighbors(x, y):
+    return [
+        (x + a, y + b)
+        for a in (-1, 0, 1)
+        for b in (-1, 0, 1)
+        if a != 0 or b != 0
+    ]
+
+def summing_spiral():
+    values = defaultdict(int)
+    for x, y in spiral_generator():
+        value = sum(values[xy] for xy in neighbors(x, y)) or 1
+        values[(x, y)] = value
+        yield value
+
+for value in summing_spiral():
+    if value > puzzle_input:
+        print(value)
+        break
