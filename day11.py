@@ -25,48 +25,41 @@
 # ne,ne,s,s is 2 steps away (se,se).
 # se,sw,se,sw,sw is 3 steps away (s,s,sw).
 
-puzzle_input = open("day11.txt", "r")
-puzzle_input = puzzle_input.read()
-puzzle_input = puzzle_input.split(",")
+from __future__ import print_function
+import functools
 
-instruction_coordinates = []
+with open("day11.txt", "r") as puzzle_file:
+    puzzle_input = puzzle_file.read().split(",")
 
-def end_hex(x, y, z, instructions):
-    hex_coordinates = [x, y, z]
-    directions = {
-        "n": (0, 1, -1),
-        "ne": (1, 0, -1),
-        "se": (1, -1, 0),
-        "s": (0, -1, 1),
-        "sw": (-1, 0, 1),
-        "nw": (-1, 1, 0)
-    }
-    for instruction in instructions:
-        x += directions[instruction][0]
-        y += directions[instruction][1]
-        z += directions[instruction][2]
-        hex_coordinates = [x, y, z]
-        instruction_coordinates.append(hex_coordinates)
-    return hex_coordinates
+directions = {
+    "n": (0, 1, -1),
+    "ne": (1, 0, -1),
+    "se": (1, -1, 0),
+    "s": (0, -1, 1),
+    "sw": (-1, 0, 1),
+    "nw": (-1, 1, 0)
+}
 
-def shortest_dist(x, y, z, instructions):
-    start = (x, y, z)
-    end = end_hex(x, y, z, instructions)
-    return max(abs(end[0] - start[0]), abs(end[1] - start[1]), abs(end[2] - start[2]))
+def move_hex(point, instruction):
+    x, y, z = point
+    dx, dy, dz = directions[instruction]
+    return (x + dx, y + dy, z + dz)
 
-print shortest_dist(0, 0, 0, puzzle_input)
+def distance_to_origin(point):
+    x, y, z = point
+    return max(abs(x), abs(y), abs(z))
 
 # --- Part Two ---
 
 # How many steps away is the furthest he ever got from his starting position?
 
-def longest_dist(x, y, z, instructions):
-    max_dist = 0
-    end_hex(x, y, z, instructions)
-    for coordinate in instruction_coordinates:
-        start = (x, y, z)
-        end = coordinate
-        max_dist = max(max_dist, max(abs(end[0] - start[0]), abs(end[1] - start[1]), abs(end[2] - start[2])))
-    return max_dist
+def move_and_max(current, instruction):
+    last_point, max_distance = current
+    next_point = move_hex(last_point, instruction)
+    return (next_point, max(max_distance, distance_to_origin(next_point)))
 
-print longest_dist(0, 0, 0, puzzle_input)
+last_point, max_distance = functools.reduce(
+        move_and_max, puzzle_input, ((0, 0, 0), 0))
+
+print(distance_to_origin(last_point))
+print(max_distance)
