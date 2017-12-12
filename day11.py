@@ -29,6 +29,8 @@ puzzle_input = open("day11.txt", "r")
 puzzle_input = puzzle_input.read()
 puzzle_input = puzzle_input.split(",")
 
+instruction_coordinates = []
+
 def end_hex(x, y, z, instructions):
     hex_coordinates = [x, y, z]
     directions = {
@@ -44,6 +46,7 @@ def end_hex(x, y, z, instructions):
         y += directions[instruction][1]
         z += directions[instruction][2]
         hex_coordinates = [x, y, z]
+        instruction_coordinates.append(hex_coordinates)
     return hex_coordinates
 
 def shortest_dist(x, y, z, instructions):
@@ -52,3 +55,18 @@ def shortest_dist(x, y, z, instructions):
     return max(abs(end[0] - start[0]), abs(end[1] - start[1]), abs(end[2] - start[2]))
 
 print shortest_dist(0, 0, 0, puzzle_input)
+
+# --- Part Two ---
+
+# How many steps away is the furthest he ever got from his starting position?
+
+def longest_dist(x, y, z, instructions):
+    max_dist = 0
+    end_hex(x, y, z, instructions)
+    for coordinate in instruction_coordinates:
+        start = (x, y, z)
+        end = coordinate
+        max_dist = max(max_dist, max(abs(end[0] - start[0]), abs(end[1] - start[1]), abs(end[2] - start[2])))
+    return max_dist
+
+print longest_dist(0, 0, 0, puzzle_input)
