@@ -45,7 +45,7 @@ def end_hex(x, y, z, instructions):
         x += directions[instruction][0]
         y += directions[instruction][1]
         z += directions[instruction][2]
-        hex_coordinates = [x, y, z]
+        hex_coordinates = (x, y, z)
         instruction_coordinates.append(hex_coordinates)
     return hex_coordinates
 
@@ -60,13 +60,12 @@ print shortest_dist(0, 0, 0, puzzle_input)
 
 # How many steps away is the furthest he ever got from his starting position?
 
-def longest_dist(x, y, z, instructions):
+def longest_dist(x, y, z, coordinates):
     max_dist = 0
-    end_hex(x, y, z, instructions)
-    for coordinate in instruction_coordinates:
+    for coordinate in coordinates:
         start = (x, y, z)
         end = coordinate
         max_dist = max(max_dist, max(abs(end[0] - start[0]), abs(end[1] - start[1]), abs(end[2] - start[2])))
     return max_dist
 
-print longest_dist(0, 0, 0, puzzle_input)
+print longest_dist(0, 0, 0, instruction_coordinates)
