@@ -1,0 +1,54 @@
+# --- Day 11: Hex Ed ---
+
+# Crossing the bridge, you've barely reached the other side of the stream when a program comes up to you, clearly in distress. "It's my child process," she says, "he's gotten lost in an infinite grid!"
+
+# Fortunately for her, you have plenty of experience with infinite grids.
+
+# Unfortunately for you, it's a hex grid.
+
+# The hexagons ("hexes") in this grid are aligned such that adjacent hexes can be found to the north, northeast, southeast, south, southwest, and northwest:
+
+#   \ n  /
+# nw +--+ ne
+#   /    \
+# -+      +-
+#   \    /
+# sw +--+ se
+#   / s  \
+
+# You have the path the child process took. Starting where he started, you need to determine the fewest number of steps required to reach him. (A "step" means to move from the hex you are in to any adjacent hex.)
+
+# For example:
+
+# ne,ne,ne is 3 steps away.
+# ne,ne,sw,sw is 0 steps away (back where you started).
+# ne,ne,s,s is 2 steps away (se,se).
+# se,sw,se,sw,sw is 3 steps away (s,s,sw).
+
+puzzle_input = open("day11.txt", "r")
+puzzle_input = puzzle_input.read()
+puzzle_input = puzzle_input.split(",")
+
+def end_hex(x, y, z, instructions):
+    hex_coordinates = [x, y, z]
+    directions = {
+        "n": (0, 1, -1),
+        "ne": (1, 0, -1),
+        "se": (1, -1, 0),
+        "s": (0, -1, 1),
+        "sw": (-1, 0, 1),
+        "nw": (-1, 1, 0)
+    }
+    for instruction in instructions:
+        x += directions[instruction][0]
+        y += directions[instruction][1]
+        z += directions[instruction][2]
+        hex_coordinates = [x, y, z]
+    return hex_coordinates
+
+def shortest_dist(x, y, z, instructions):
+    start = (x, y, z)
+    end = end_hex(x, y, z, instructions)
+    return max(abs(end[0] - start[0]), abs(end[1] - start[1]), abs(end[2] - start[2]))
+
+print shortest_dist(0, 0, 0, puzzle_input)
