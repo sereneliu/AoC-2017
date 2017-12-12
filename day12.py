@@ -29,32 +29,30 @@
 
 # How many programs are in the group that contains program ID 0?
 
-puzzle_input = open('day12.txt', 'r')
-puzzle_input = puzzle_input.read()
-puzzle_input = puzzle_input.split('\n')
+from __future__ import print_function
+from collections import deque
 
-programs = {}
+def parse_programs(some_input):
+    return { 
+        program: [p.strip() for p in communicates_with.split(',')]
+        for program, _, communicates_with in
+        (line.split(None, 2) for line in some_input)
+    }
 
-def add_programs(some_input):
-    for p in some_input:
-        program = p[0:p.index(' ')]
-        communicates_with = p[p.index('>') + 2:].split(', ')
-        programs.update({program: communicates_with})
-    return programs
+with open('day12.txt') as puzzle_file:
+    puzzle_input = parse_programs(puzzle_file)
 
-add_programs(puzzle_input)
-
-def find_programs(n):
+def find_programs(programs, *roots):
     group_containing_n = set()
-    for num in n:
+    q = deque(roots)
+    while q:
+        num = q.pop()
         if num not in group_containing_n:
             group_containing_n.add(num)
-            for program in programs[num]:
-                n.append(program)
-#    print len(group_containing_n)
+            q.extend(programs[num])
     return group_containing_n
 
-# print find_programs([str(0)])
+print(len(find_programs(puzzle_input, '0')))
 
 # --- Part Two ---
 
@@ -66,16 +64,13 @@ def find_programs(n):
 
 # How many groups are there in total?
 
-def find_groups(some_input):
-    groups = []
-    programs_remaining = programs.keys()
-    for num in range(len(some_input)):
-        num = str(num)
-        if num in programs_remaining:
-            num = [num]
-            group_num = find_programs(num)
-            groups.append(group_num)
-            programs_remaining = list(set(programs_remaining).difference(group_num))
-    return len(groups)
+def find_groups(programs):
+    groups = 0
+    programs_remaining = set(programs.keys())
+    while programs_remaining:
+        num = programs_remaining.pop()
+        programs_remaining.difference_update(find_programs(num))
+        groups += 1
+    return groups
 
-print find_groups(puzzle_input)
+print(find_groups(puzzle_input))
