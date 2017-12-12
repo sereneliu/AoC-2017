@@ -42,18 +42,40 @@ def add_programs(some_input):
         programs.update({program: communicates_with})
     return programs
 
-def find_programs(some_input):
-    add_programs(some_input)
-    group_containing_0 = set()
-    n = [str(0)]
+add_programs(puzzle_input)
+
+def find_programs(n):
+    group_containing_n = set()
     for num in n:
-        if num not in group_containing_0:
-            group_containing_0.add(num)
+        if num not in group_containing_n:
+            group_containing_n.add(num)
             for program in programs[num]:
                 n.append(program)
-    print len(group_containing_0)
-    return group_containing_0
+#    print len(group_containing_n)
+    return group_containing_n
 
-print find_programs(puzzle_input)
-        
-        
+# print find_programs([str(0)])
+
+# --- Part Two ---
+
+# There are more programs than just the ones in the group containing program ID 0. The rest of them have no way of reaching that group, and still might have no way of reaching each other.
+
+# A group is a collection of programs that can all communicate via pipes either directly or indirectly. The programs you identified just a moment ago are all part of the same group. Now, they would like you to determine the total number of groups.
+
+# In the example above, there were 2 groups: one consisting of programs 0,2,3,4,5,6, and the other consisting solely of program 1.
+
+# How many groups are there in total?
+
+def find_groups(some_input):
+    groups = []
+    programs_remaining = programs.keys()
+    for num in range(len(some_input)):
+        num = str(num)
+        if num in programs_remaining:
+            num = [num]
+            group_num = find_programs(num)
+            groups.append(group_num)
+            programs_remaining = list(set(programs_remaining).difference(group_num))
+    return len(groups)
+
+print find_groups(puzzle_input)
