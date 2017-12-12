@@ -1,3 +1,5 @@
+# --- Day 12: Digital Plumber ---
+
 # Walking along the memory banks of the stream, you find a small village that is experiencing a little confusion: some programs can't communicate with each other.
 
 # Programs in this village communicate using a fixed system of pipes. Messages are passed between programs using these pipes, but most programs aren't connected to each other directly. Instead, programs pass messages between each other until the message reaches the intended recipient.
@@ -17,8 +19,8 @@
 # 4 <-> 2, 3, 6
 # 5 <-> 6
 # 6 <-> 4, 5
-# In this example, the following programs are in the group that contains program ID 0:
 
+# In this example, the following programs are in the group that contains program ID 0:
 # Program 0 by definition.
 # Program 2, directly connected to program 0.
 # Program 3 via program 2.
@@ -30,31 +32,25 @@
 # How many programs are in the group that contains program ID 0?
 
 puzzle_input = open('day12.txt', 'r')
-puzzle_input = puzzle_input.read()
-puzzle_input = puzzle_input.split('\n')
+puzzle_input = puzzle_input.read().split('\n')
 
 programs = {}
 
 def add_programs(some_input):
     for p in some_input:
-        program = p[0:p.index(' ')]
-        communicates_with = p[p.index('>') + 2:].split(', ')
-        programs.update({program: communicates_with})
+        programs.update({p[0:p.index(' ')]: p[p.index('>') + 2:].split(', ')})
     return programs
 
 add_programs(puzzle_input)
 
-def find_programs(n):
-    group_containing_n = set()
+def find_programs(n, group_containing_n):
     for num in n:
         if num not in group_containing_n:
             group_containing_n.add(num)
-            for program in programs[num]:
-                n.append(program)
-#    print len(group_containing_n)
+            find_programs(programs[num], group_containing_n)
     return group_containing_n
 
-# print find_programs([str(0)])
+# print len(find_programs([str(0)], set()))
 
 # --- Part Two ---
 
@@ -71,7 +67,7 @@ def find_groups(some_input):
     programs_remaining = programs.keys()
     for num in range(len(some_input)):
         if str(num) in programs_remaining:
-            group_num = find_programs([str(num)])
+            group_num = find_programs([str(num)], set())
             groups.append(group_num)
             programs_remaining = list(set(programs_remaining).difference(group_num))
     return len(groups)
