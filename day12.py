@@ -64,12 +64,12 @@ def find_programs(n, group_containing_n):
 
 def find_groups(some_input):
     groups = []
-    programs_remaining = programs.keys()
+    programs_remaining = set(programs.keys())
     for num in range(len(some_input)):
         if str(num) in programs_remaining:
             group_num = find_programs([str(num)], set())
             groups.append(group_num)
-            programs_remaining = list(set(programs_remaining).difference(group_num))
+            programs_remaining = programs_remaining.difference(group_num)
     return len(groups)
 
 print find_groups(puzzle_input)
