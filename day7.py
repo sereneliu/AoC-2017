@@ -43,7 +43,7 @@
 
 # Before you're ready to help them, you need to make sure your information is correct. What is the name of the bottom program?
 
-puzzle_input = open("day7.txt", "r")
+puzzle_input = open("day7_test.txt", "r")
 puzzle_input = puzzle_input.read()
 input_list = puzzle_input.split("\n")
 
@@ -88,17 +88,18 @@ def bottom_tower(some_input):
 # Given that exactly one program is the wrong weight, what would its weight need to be to balance the entire tower?
 
 def balance_towers_above(some_input):
-    sub_towers = towers.get(bottom_tower(some_input).pop())
-    sub_towers = sub_towers[1:]
+    sub_towers = towers[bottom_tower(some_input).pop()][1:]
     tower_weights = {}
     for sub_tower in sub_towers:
         def stack_weight(some_towers, weight):
-            for sub_sub_tower in towers[sub_tower][1:]:
-                weight += (int(towers[sub_sub_tower][0]))
-                if len(towers[sub_sub_tower]) > 1:
+            for some_tower in some_towers:
+                weight += (int(towers[some_tower][0]))
+                if len(towers[some_tower]) > 1:
+                    print (towers[sub_tower][1:], weight)
                     stack_weight(towers[sub_tower][1:], weight)
             return weight
-        tower_weights.update({sub_tower: stack_weight(sub_tower, int(towers[sub_tower][0]))})
+        tower_weights[sub_tower] = stack_weight(towers[sub_tower][1:], int(towers[sub_tower][0]))
+    print tower_weights
     unique_weights = set()
     for value in tower_weights.values():
         unique_weights.add(value)
