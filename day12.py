@@ -43,14 +43,14 @@ def add_programs(some_input):
 
 add_programs(puzzle_input)
 
-def find_programs(n, group_containing_n):
-    for num in n:
-        if num not in group_containing_n:
-            group_containing_n.add(num)
-            find_programs(programs[num], group_containing_n)
+def find_programs(num, group_containing_n):
+    if num not in group_containing_n:
+        group_containing_n.add(num)
+        for connected in programs[num]:
+            find_programs(connected, group_containing_n)
     return group_containing_n
 
-# print len(find_programs([str(0)], set()))
+print len(find_programs(str(0), set()))
 
 # --- Part Two ---
 
@@ -67,7 +67,7 @@ def find_groups(some_input):
     programs_remaining = set(programs.keys())
     for num in range(len(some_input)):
         if str(num) in programs_remaining:
-            group_num = find_programs([str(num)], set())
+            group_num = find_programs(str(num), set())
             groups.append(group_num)
             programs_remaining = programs_remaining.difference(group_num)
     return len(groups)
