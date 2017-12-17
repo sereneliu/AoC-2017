@@ -30,13 +30,10 @@
 # What is the value after 2017 in your completed circular buffer?
 
 def spinlock(steps):
-    circular_buffer = []
+    circular_buffer = [0]
     pos = 0
-    for n in xrange(2018):
-        if len(circular_buffer) == 0:
-            circular_buffer.insert(pos + steps + 1, n)
-        else:
-            circular_buffer.insert((pos + steps) % n + 1, n)
+    for n in xrange(1, 2018):
+        circular_buffer.insert((pos + steps) % n + 1, n)
         pos = circular_buffer.index(n)
     return circular_buffer[circular_buffer.index(2017) + 1]
 
