@@ -161,6 +161,116 @@
 
 # Given the details of the firewall you've recorded, if you leave immediately, what is the severity of your whole trip?
 
+# --- Part Two ---
+
+# Now, you need to pass through the firewall without being caught - easier said than done.
+
+# You can't control the speed of the packet, but you can delay it any number of picoseconds. For each picosecond you delay the packet before beginning your trip, all security scanners move one step. You're not in the firewall during this time; you don't enter layer 0 until you stop delaying the packet.
+
+# In the example above, if you delay 10 picoseconds (picoseconds 0 - 9), you won't get caught:
+
+# State after delaying:
+#  0   1   2   3   4   5   6
+# [ ] [S] ... ... [ ] ... [ ]
+# [ ] [ ]         [ ]     [ ]
+# [S]             [S]     [S]
+#                 [ ]     [ ]
+
+# Picosecond 10:
+#  0   1   2   3   4   5   6
+# ( ) [S] ... ... [ ] ... [ ]
+# [ ] [ ]         [ ]     [ ]
+# [S]             [S]     [S]
+#                 [ ]     [ ]
+
+#  0   1   2   3   4   5   6
+# ( ) [ ] ... ... [ ] ... [ ]
+# [S] [S]         [S]     [S]
+# [ ]             [ ]     [ ]
+#                 [ ]     [ ]
+
+# Picosecond 11:
+#  0   1   2   3   4   5   6
+# [ ] ( ) ... ... [ ] ... [ ]
+# [S] [S]         [S]     [S]
+# [ ]             [ ]     [ ]
+#                 [ ]     [ ]
+
+#  0   1   2   3   4   5   6
+# [S] (S) ... ... [S] ... [S]
+# [ ] [ ]         [ ]     [ ]
+# [ ]             [ ]     [ ]
+#                 [ ]     [ ]
+
+# Picosecond 12:
+#  0   1   2   3   4   5   6
+# [S] [S] (.) ... [S] ... [S]
+# [ ] [ ]         [ ]     [ ]
+# [ ]             [ ]     [ ]
+#                 [ ]     [ ]
+
+#  0   1   2   3   4   5   6
+# [ ] [ ] (.) ... [ ] ... [ ]
+# [S] [S]         [S]     [S]
+# [ ]             [ ]     [ ]
+#                 [ ]     [ ]
+
+# Picosecond 13:
+#  0   1   2   3   4   5   6
+# [ ] [ ] ... (.) [ ] ... [ ]
+# [S] [S]         [S]     [S]
+# [ ]             [ ]     [ ]
+#                 [ ]     [ ]
+
+#  0   1   2   3   4   5   6
+# [ ] [S] ... (.) [ ] ... [ ]
+# [ ] [ ]         [ ]     [ ]
+# [S]             [S]     [S]
+#                 [ ]     [ ]
+
+# Picosecond 14:
+#  0   1   2   3   4   5   6
+# [ ] [S] ... ... ( ) ... [ ]
+# [ ] [ ]         [ ]     [ ]
+# [S]             [S]     [S]
+#                 [ ]     [ ]
+
+#  0   1   2   3   4   5   6
+# [ ] [ ] ... ... ( ) ... [ ]
+# [S] [S]         [ ]     [ ]
+# [ ]             [ ]     [ ]
+#                 [S]     [S]
+
+# Picosecond 15:
+#  0   1   2   3   4   5   6
+# [ ] [ ] ... ... [ ] (.) [ ]
+# [S] [S]         [ ]     [ ]
+# [ ]             [ ]     [ ]
+#                 [S]     [S]
+
+#  0   1   2   3   4   5   6
+# [S] [S] ... ... [ ] (.) [ ]
+# [ ] [ ]         [ ]     [ ]
+# [ ]             [S]     [S]
+#                 [ ]     [ ]
+
+# Picosecond 16:
+#  0   1   2   3   4   5   6
+# [S] [S] ... ... [ ] ... ( )
+# [ ] [ ]         [ ]     [ ]
+# [ ]             [S]     [S]
+#                 [ ]     [ ]
+
+#  0   1   2   3   4   5   6
+# [ ] [ ] ... ... [ ] ... ( )
+# [S] [S]         [S]     [S]
+# [ ]             [ ]     [ ]
+#                 [ ]     [ ]
+
+# Because all smaller delays would get you caught, the fewest number of picoseconds you would need to delay to get through safely is 10.
+
+# What is the fewest number of picoseconds that you need to delay the packet to pass through the firewall without being caught?
+
 test_input = '''0: 3
 1: 2
 4: 4
@@ -198,20 +308,27 @@ def scanners(dictionary):
         scanner_dict[key] = scanner_cycle
     return scanner_dict
 
-def move_through_firewall(firewall, dictionary):
-    caught = []
+def move_through_firewall(firewall, dictionary, delay):
+#    caught = []
     i = 0
     for picosecond in range(len(firewall)):
         packet = str(i) + '-' + str(0)
         for scanner in scanners(dictionary).values():
-            scanner_pos = scanner[i % len(scanner)]
-            if scanner_pos == packet:
-                caught.append(i)
+            if packet == scanner[(i + delay) % len(scanner)]:
+                return "caught"
+#                caught.append(i)
         i += 1
-    severity = 0
-    for layer in caught:
-        severity += layer * len(firewall[layer])
-    return severity
+#    severity = 0
+#    for layer in caught:
+#        severity += layer * firewall_dict[layer]
+#    return caught
+
+def not_caught(firewall, dictionary):
+    delay = 0
+    caught = "caught"
+    while caught == "caught":
+        caught = move_through_firewall(firewall, dictionary, delay)
+        delay += 1
+    return delay - 1
         
-print move_through_firewall(setup_firewall(puzzle_input), firewall_dict)
-    
+print not_caught(setup_firewall(puzzle_input), firewall_dict)
