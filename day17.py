@@ -29,20 +29,18 @@
 
 # What is the value after 2017 in your completed circular buffer?
 
-# def spinlock(steps):
-#    circular_buffer = []
-#    pos = 0
-#    value = 0
-#    for n in range(2018):
-#        if len(circular_buffer) == 0:
-#            circular_buffer.insert(pos + steps + 1, value)
-#        else:
-#            circular_buffer.insert(((pos + steps) % len(circular_buffer)) + 1, value)
-#        pos = circular_buffer.index(value)
-#        value += 1
-#    return circular_buffer[circular_buffer.index(2017) + 1]
+def spinlock(steps):
+    circular_buffer = []
+    pos = 0
+    for n in xrange(2018):
+        if len(circular_buffer) == 0:
+            circular_buffer.insert(pos + steps + 1, n)
+        else:
+            circular_buffer.insert((pos + steps) % n + 1, n)
+        pos = circular_buffer.index(n)
+    return circular_buffer[circular_buffer.index(2017) + 1]
 
-# print spinlock(335)
+print spinlock(335)
 
 # --- Part Two ---
 
@@ -56,15 +54,13 @@
 
 # What is the value after 0 the moment 50000000 is inserted?
 
-def spinlock(steps):
+def spinlock_pos1(steps):
     pos = 0
     value = 0
-    for n in xrange(50000000):
-        if n != 0:
-            pos = (pos + steps) % n
-            if pos == 0:
-                value = n
-            pos += 1
+    for n in xrange(1, 50000000):
+        pos = (pos + steps) % n + 1
+        if pos == 1:
+            value = n
     return value
 
-print spinlock(335)
+print spinlock_pos1(335)
