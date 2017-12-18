@@ -43,32 +43,67 @@
 
 # Before you're ready to help them, you need to make sure your information is correct. What is the name of the bottom program?
 
-puzzle_input = open("day7.txt", "r")
+puzzle_input = open("day7_test.txt", "r")
 puzzle_input = puzzle_input.read()
 input_list = puzzle_input.split("\n")
 
+towers = {}
+
 def tower_dict(some_input):
-    towers = {}
     for line in some_input:
-        tower_name = line[0:line.index(" (")]
-        holding_up = ""
+        tower_name = line[0:line.index(" ")]
+        holding_up = []
         if "-> " in line:
-            holding_up = line[line.index("-> ") + 3:].split(", ")
+            holding_up = [(line[line.index("(") + 1:line.index(")")])] + line[line.index("-> ") + 3:].split(", ")
+        else:
+            holding_up = [(line[line.index("(") + 1:line.index(")")])]
         towers.update({tower_name: holding_up})
     return towers
 
 def bottom_tower(some_input):
-    all_towers = tower_dict(some_input)
-    holding_towers = []
-    mid_towers = []
-    for tower in all_towers:
-        if all_towers.get(tower) != "":
-            holding_towers.append(tower)
-        for sub_tower in all_towers:
-            if all_towers.get(tower) != "" and tower in all_towers.get(sub_tower):
-                mid_towers.append(tower)
-    for holding_tower in holding_towers:
-        if holding_tower not in mid_towers:
-            return holding_tower
+    all_towers = set()
+    sub_towers = set()
+    for tower, sub_tower in tower_dict(input_list).items():
+        all_towers.add(tower)
+        sub_towers.update(sub_tower[1:])
+    return (all_towers.difference(sub_towers))
+
+# print bottom_tower(input_list)
+
+# --- Part Two ---
+
+# The programs explain the situation: they can't get down. Rather, they could get down, if they weren't expending all of their energy trying to keep the tower balanced. Apparently, one program has the wrong weight, and until it's fixed, they're stuck here.
+
+# For any program holding a disc, each program standing on that disc forms a sub-tower. Each of those sub-towers are supposed to be the same weight, or the disc itself isn't balanced. The weight of a tower is the sum of the weights of the programs in that tower.
+
+# In the example above, this means that for ugml's disc to be balanced, gyxo, ebii, and jptl must all have the same weight, and they do: 61.
+
+# However, for tknk to be balanced, each of the programs standing on its disc and all programs above it must each match. This means that the following sums must all be the same:
+
+# ugml + (gyxo + ebii + jptl) = 68 + (61 + 61 + 61) = 251
+# padx + (pbga + havc + qoyq) = 45 + (66 + 66 + 66) = 243
+# fwft + (ktlj + cntj + xhth) = 72 + (57 + 57 + 57) = 243
+# As you can see, tknk's disc is unbalanced: ugml's stack is heavier than the other two. Even though the nodes above ugml are balanced, ugml itself is too heavy: it needs to be 8 units lighter for its stack to weigh 243 and keep the towers balanced. If this change were made, its weight would be 60.
+
+# Given that exactly one program is the wrong weight, what would its weight need to be to balance the entire tower?
+
+def balance_towers_above(some_input):
+    sub_towers = towers[bottom_tower(some_input).pop()][1:]
+    tower_weights = {}
+    for sub_tower in sub_towers:
+        def stack_weight(some_towers, weight):
+            for some_tower in some_towers:
+                weight += (int(towers[some_tower][0]))
+                if len(towers[some_tower]) > 1:
+                    print (towers[sub_tower][1:], weight)
+                    stack_weight(towers[sub_tower][1:], weight)
+            return weight
+        tower_weights[sub_tower] = stack_weight(towers[sub_tower][1:], int(towers[sub_tower][0]))
+    print tower_weights
+    unique_weights = set()
+    for value in tower_weights.values():
+        unique_weights.add(value)
+    unique_weights = list(unique_weights)
+    return abs(unique_weights[1] - unique_weights[0])
     
-print bottom_tower(input_list)
+print balance_towers_above(input_list)
