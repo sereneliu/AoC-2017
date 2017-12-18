@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 # --- Day 15: Dueling Generators ---
 
 # Here, you encounter a pair of dueling generators. The generators, called generator A and generator B, are trying to agree on a sequence of numbers. However, one of them is malfunctioning, and so the sequences don't always match.
@@ -108,18 +110,16 @@ def gen_B_criteria(b):
         b = gen_B(b)
     return b
 
-def compare_binary(gen_value_a, gen_value_b, match):
-    if '{0:b}'.format(gen_value_a)[-16:] == '{0:b}'.format(gen_value_b)[-16:]:
-        match += 1
-    return match
+def compare_binary(gen_value_a, gen_value_b):
+    return gen_value_a % 65536 == gen_value_b % 65536
 
 def significant_sample(value_a, value_b, count):
-    for n in range(5000000):
-        count = compare_binary(gen_A_criteria(value_a), gen_B_criteria(value_b), count)
+    for _ in range(5000000):
+        count += compare_binary(gen_A_criteria(value_a), gen_B_criteria(value_b))
         value_a = gen_A_criteria(value_a)
         value_b = gen_B_criteria(value_b)
     return count
 
-print significant_sample(618, 814, 0)
+print(significant_sample(618, 814, 0))
 
 # pypy: ~/pypy2-v5.9.0-linux64/bin/pypy
