@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 # --- Day 14: Disk Defragmentation ---
 
 # Suddenly, a scheduled job activates the system's disk defragmenter. Were the situation different, you might sit and watch it for a while, but today, you just don't have that kind of time. It's soaking up valuable system resources that are needed elsewhere, and so the only option is to help it finish its task as soon as possible.
@@ -30,29 +32,20 @@
 test_input = 'flqrgnkx'
 puzzle_input = 'wenycdww'
 
-from day10 import knot_hash
+from day10_v2 import knot_hash
 
 def knot_hash_grid(puzzle_input):
     used_squares = 0
     grid = []
     for n in range(128):
-        binary_hash = []
-        for num in knot_hash(puzzle_input + '-' + str(n)):
-            binary_hash.append('{0:b}'.format(num).zfill(8))
-        binary_hash = ''.join(binary_hash)
-        row = []
-        for bit in binary_hash:
-            if bit == str(1):
-                bit = '#'
-                used_squares += 1
-            else:
-                bit = '.'
-            row.append(bit)
+        hash_bytes = knot_hash(puzzle_input + '-' + str(n))
+        binary_hash = ''.join('{0:08b}'.format(num) for num in hash_bytes)
+        row = ['#' if bit == '1' else '.' for bit in binary_hash]
         grid.append(row)
-#    print used_squares
+#    print(used_squares)
     return grid
 
-# print knot_hash_grid(puzzle_input)
+# print(knot_hash_grid(puzzle_input))
 
 # --- Part Two ---
 
@@ -75,40 +68,42 @@ def knot_hash_grid(puzzle_input):
 
 # How many regions are present given your key string?
 
-connection_list = {}
-
 def find_connections(grid):
+    connections = {}
     for i in range(len(grid)):
         for j in range(len(grid[i])):
-            connection_list[str(i) + '-' + str(j)] = [grid[i][j]]
             if grid[i][j] == '#':
-                if j != len(grid[i]) - 1 and grid[i][j + 1] == '#':
-                        connection_list[str(i) + '-' + str(j)].append(str(i) + '-' + str(j + 1))
-                if j != 0 and grid[i][j - 1] == '#':
-                        connection_list[str(i) + '-' + str(j)].append(str(i) + '-' + str(j - 1))
-                if i != len(grid) - 1 and grid[i + 1][j] == '#':
-                        connection_list[str(i) + '-' + str(j)].append(str(i + 1) + '-' + str(j))
-                if i != 0 and grid[i - 1][j] == '#':
-                        connection_list[str(i) + '-' + str(j)].append(str(i - 1) + '-' + str(j))
+                connections[(i, j)] = []
+                if j < len(grid[i]) - 1 and grid[i][j + 1] == '#':
+                        connections[(i, j)].append((i, j + 1))
+                if j > 0 and grid[i][j - 1] == '#':
+                        connections[(i, j)].append((i, j - 1))
+                if i < len(grid) - 1 and grid[i + 1][j] == '#':
+                        connections[(i, j)].append((i + 1, j))
+                if i > 0 and grid[i - 1][j] == '#':
+                        connections[(i, j)].append((i - 1, j))
+    return connections
 
-find_connections(knot_hash_grid(puzzle_input))
+def find_region(connections, key):
+    q = [key]
+    seen = set(q)
+    while q:
+        key = q.pop()
+        for connected in connections[key]:
+            if connected not in seen:
+                q.append(connected)
+                seen.add(connected)
+    return seen
 
-def find_squares(key, region_containing_key):
-    if key not in region_containing_key:
-        region_containing_key.add(key)
-        for connected in connection_list[key][1:]:
-            find_squares(connected, region_containing_key)
-    return region_containing_key
-
-def find_regions(some_list):
+def find_regions(connections):
     regions = []
-    regions_remaining = set(some_list.keys())
-    for key in connection_list.keys():
-        if key in regions_remaining:
-            region_key = find_squares(key, set())
-            if connection_list[key] != ['.']:
-                regions.append(region_key)
-            regions_remaining = regions_remaining.difference(region_key)
-    return len(regions)
+    keys_remaining = set(connections.keys())
+    while keys_remaining:
+        key = keys_remaining.pop()
+        region = find_region(connections, key)
+        regions.append(region)
+        keys_remaining.difference_update(region)
+    return regions
 
-print find_regions(connection_list)
+connections = find_connections(knot_hash_grid(puzzle_input))
+print(len(find_regions(connections)))
