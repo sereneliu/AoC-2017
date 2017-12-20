@@ -23,8 +23,8 @@
 
 # The little packet looks up at you, hoping you can help it find the way. What letters will it see (in the order it would see them) if it follows the path? (The routing diagram is very wide; make sure you view it without line wrapping.)
 
-puzzle_input = open('day19.txt', 'r')
-puzzle_input = puzzle_input.read().split('\n')
+with open('day19.txt') as puzzle_file:
+    puzzle_input = list(puzzle_file)
 
 def down(x, y):
      return x, y + 1
@@ -51,28 +51,22 @@ def find_the_way(maze):
      y = 0
      x = maze[y].index('|')
      steps = 0
-     while True:
+     while 0 <= y < len(maze) and 0 <= x < len(maze[y]) and (maze[y][x].isalpha() or maze[y][x] in '|-+'):
           if maze[y][x].isalpha():
                collection.append(maze[y][x])
           if maze[y][x] == '+':
                if direction in ('down', 'up'):
-                    if x < len(maze[y]) - 1:
-                         if maze[y][x + 1] != ' ':
+                    if x < len(maze[y]) - 1 and maze[y][x + 1] != ' ':
                               direction = 'right'
-                    if x > 0:
-                         if maze[y][x - 1] != ' ':
+                    elif x > 0 and maze[y][x - 1] != ' ':
                               direction = 'left'
                elif direction in ('right', 'left'):
-                    if y < len(maze) - 1:
-                         if maze[y + 1][x] != ' ':
+                    if y < len(maze) - 1 and maze[y + 1][x] != ' ':
                               direction = 'down'
-                    if y > 0:
-                         if maze[y - 1][x] != ' ':
+                    elif y > 0 and maze[y - 1][x] != ' ':
                               direction = 'up'
           x, y = directions[direction](x, y)
           steps += 1
-          if not maze[y][x].isalpha() and maze[y][x] not in ('|', '-', '+'):
-               print steps
-               return ''.join(collection)          
+     return ''.join(collection), steps
           
 print find_the_way(puzzle_input)
