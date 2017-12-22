@@ -115,6 +115,9 @@ directions = {
      'l': left
 }
 
+turn_clockwise = dict(zip('urdl', 'rdlu'))
+turn_counter = dict(zip('uldr', 'ldru'))
+
 node_map = {}
 
 def add_existing(center_of_map):
@@ -132,29 +135,14 @@ def burst(center_of_map, n):
     direction = 'u'
     x, y = add_existing(center_of_map)
     for _ in xrange(n):
-        print x, y
         if (x, y) in node_map.keys() and node_map[x, y] == '#':
-            if direction == 'u':
-                direction = 'r'
-            elif direction == 'r':
-                direction = 'd'
-            elif direction == 'd':
-                direction = 'l'
-            else:
-                direction = 'u'
+            direction = turn_clockwise[direction]
             node_map[x, y] = '.'
         else:
-            if direction == 'u':
-                direction = 'l'
-            elif direction == 'l':
-                direction = 'd'
-            elif direction == 'd':
-                direction = 'r'
-            else:
-                direction = 'u'
+            direction = turn_counter[direction]
             node_map[x, y] = '#'
             infected_bursts += 1
         x, y = directions[direction](x, y)
     return infected_bursts
           
-print burst(puzzle_input, 1000)
+print burst(puzzle_input, 10000)
