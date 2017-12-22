@@ -118,30 +118,32 @@ directions = {
 def burst(node_map, n):
     infected_bursts = 0
     direction = 'u'
-    y = len(node_map) / 2
-    x = len(node_map[y]) / 2
+    y = len(node_map) // 2
+    x = len(node_map[y]) // 2
     for _ in xrange(n):
+        print y, x, node_map[y][x]
         if node_map[y][x] == '.':
             if direction == 'u':
-                direction == 'l'
+                direction = 'l'
             elif direction == 'l':
-                direction == 'd'
+                direction = 'd'
             elif direction == 'd':
-                direction == 'r'
+                direction = 'r'
             else:
-                direction == 'u'
-            node_map[y][x] == '#'
+                direction = 'u'
+            node_map[y][x] = '#'
             infected_bursts += 1
         if node_map[y][x] == '#':
             if direction == 'u':
-                direction == 'r'
+                direction = 'r'
             elif direction == 'r':
-                direction == 'd'
+                direction = 'd'
             elif direction == 'd':
-                direction == 'l'
+                direction = 'l'
             else:
-                direction == 'u'
-            node_map[y][x] == '.'
+                direction = 'u'
+            node_map[y][x] = '.'
+        print direction
         x, y = directions[direction](x, y)
     return infected_bursts
           
