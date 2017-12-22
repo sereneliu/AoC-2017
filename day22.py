@@ -115,25 +115,25 @@ directions = {
      'l': left
 }
 
-def burst(node_map, n):
+node_map = {}
+
+def add_existing(center_of_map):
+    for row_num in range(len(center_of_map)):
+        for node_num in range(len(center_of_map)):
+            x = node_num
+            y = row_num
+            node_map[x, y] = center_of_map[row_num][node_num]
+    starting_y = len(center_of_map) // 2
+    starting_x = len(center_of_map[y]) // 2
+    return starting_x, starting_y
+
+def burst(center_of_map, n):
     infected_bursts = 0
     direction = 'u'
-    y = len(node_map) // 2
-    x = len(node_map[y]) // 2
+    x, y = add_existing(center_of_map)
     for _ in xrange(n):
-        print y, x, node_map[y][x]
-        if node_map[y][x] == '.':
-            if direction == 'u':
-                direction = 'l'
-            elif direction == 'l':
-                direction = 'd'
-            elif direction == 'd':
-                direction = 'r'
-            else:
-                direction = 'u'
-            node_map[y][x] = '#'
-            infected_bursts += 1
-        if node_map[y][x] == '#':
+        print x, y
+        if (x, y) in node_map.keys() and node_map[x, y] == '#':
             if direction == 'u':
                 direction = 'r'
             elif direction == 'r':
@@ -142,8 +142,18 @@ def burst(node_map, n):
                 direction = 'l'
             else:
                 direction = 'u'
-            node_map[y][x] = '.'
-        print direction
+            node_map[x, y] = '.'
+        else:
+            if direction == 'u':
+                direction = 'l'
+            elif direction == 'l':
+                direction = 'd'
+            elif direction == 'd':
+                direction = 'r'
+            else:
+                direction = 'u'
+            node_map[x, y] = '#'
+            infected_bursts += 1
         x, y = directions[direction](x, y)
     return infected_bursts
           
