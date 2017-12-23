@@ -1,0 +1,57 @@
+# --- Day 23: Coprocessor Conflagration ---
+
+# You decide to head directly to the CPU and fix the printer from there. As you get close, you find an experimental coprocessor doing so much work that the local programs are afraid it will halt and catch fire. This would cause serious issues for the rest of the computer, so you head in and see what you can do.
+
+# The code it's running seems to be a variant of the kind you saw recently on that tablet. The general functionality seems very similar, but some of the instructions are different:
+
+# set X Y sets register X to the value of Y.
+# sub X Y decreases register X by the value of Y.
+# mul X Y sets register X to the result of multiplying the value contained in register X by the value of Y.
+# jnz X Y jumps with an offset of the value of Y, but only if the value of X is not zero. (An offset of 2 skips the next instruction, an offset of -1 jumps to the previous instruction, and so on.)
+
+# Only the instructions listed above are used. The eight registers here, named a through h, all start at 0.
+
+# The coprocessor is currently set to some kind of debug mode, which allows for testing, but prevents it from doing any meaningful work.
+
+# If you run the program (your puzzle input), how many times is the mul instruction invoked?
+
+with open('day23.txt') as puzzle_file:
+    puzzle_input = [line.split(' ') for line in puzzle_file.read().split('\n')]
+
+register_dict = {}
+
+def find_registers(instructions):
+    for instruction in instructions:
+        if instruction[1].isalpha():
+            register_dict[instruction[1]] = 0
+
+def read_instructions(instructions):
+    find_registers(instructions)
+    mul_instruction = 0
+    i = 0
+    num = 0
+    while i < len(instructions):
+        instruction = instructions[i][0]
+        if instructions[i][1] not in register_dict.keys():
+            register = int(instructions[i][1])
+        else:
+            register = instructions[i][1]
+        if len(instructions[i]) > 2:
+            if instructions[i][2] not in register_dict.keys():
+                num = int(instructions[i][2])
+            else:
+                num = register_dict[instructions[i][2]]
+        if instruction == 'set':
+            register_dict[register] = num
+        if instruction == 'sub':
+            register_dict[register] -= num
+        if instruction == 'mul':
+            register_dict[register] *= num
+            mul_instruction += 1
+        if instruction == 'jnz' and register_dict.get(register, register) != 0:
+            i += num
+        else:
+            i += 1
+    return mul_instruction
+
+print read_instructions(puzzle_input)
