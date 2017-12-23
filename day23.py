@@ -95,37 +95,38 @@ def debug_mode(instructions):
     
 print debug_mode(puzzle_input)
 
-# set b 57
+# set b 57              # set-up
 # set c b
 # jnz a 2
 # jnz 1 5
 # mul b 100
-# sub b -100000
+# sub b -100000         # b = 105,700
 # set c b
-# sub c -17000
-#    set f 1
-#    set d 2
-#        set e 2
+# sub c -17000          # c = 122,700
+#    set f 1            # f = 1
+#    set d 2            # start d at 2
+#        set e 2        # start e at 2
 #            set g d
 #            mul g e
 #            sub g b
-#            jnz g 2
-#            set f 0
-#            sub e -1
+#            jnz g 2    # if d * e = b:
+#            set f 0        # f = 0
+
+#            sub e -1   # e += 1
 #            set g e
-#            sub g b
-#            jnz g -8
-#        sub d -1
+#            sub g b    # if e = b:
+#            jnz g -8       # end loop
+#        sub d -1       # d += 1
 #        set g d
-#        sub g b
-#        jnz g -13
-#    jnz f 2
-#    sub h -1
+#        sub g b        # if d = b:
+#        jnz g -13          # end loop
+#    jnz f 2            # if f = 0:
+#    sub h -1               # h += 1
 #    set g b
-#    sub g c
-#    jnz g 2
-#    jnz 1 3
-#    sub b -17
+#    sub g c            # if b = c:
+#    jnz g 2                # end loop
+#    jnz 1 3            # else:
+#    sub b -17              b += 17
 #    jnz 1 -23
 
 # assert register_dict['e'] != register_dict['b'], "loop: %s, %s" % (l, register_dict)
