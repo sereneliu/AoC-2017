@@ -136,7 +136,7 @@ def burst(center_of_map, n):
     direction = 'u'
     x, y = add_existing(center_of_map)
     for _ in xrange(n):
-        if (x, y) in node_map.keys() and node_map[x, y] == '#':
+        if node_map.get((x, y)) == '#':
             direction = turn_clockwise[direction]
             node_map[x, y] = '.'
         else:
@@ -248,6 +248,7 @@ def burst_2(center_of_map, n):
     for _ in xrange(n):
         if node_map.get((x, y)) == 'W':
             node_map[x, y] = '#'
+            infected_bursts += 1
         elif node_map.get((x, y)) == '#':
             direction = turn_clockwise[direction]
             node_map[x, y] = 'F'
@@ -257,7 +258,6 @@ def burst_2(center_of_map, n):
         else:
             direction = turn_counter[direction]
             node_map[x, y] = 'W'
-            infected_bursts += 1
         x, y = directions[direction](x, y)
     return infected_bursts
 
