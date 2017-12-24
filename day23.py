@@ -15,6 +15,8 @@
 
 # If you run the program (your puzzle input), how many times is the mul instruction invoked?
 
+import sympy.ntheory.primetest
+
 with open('day23.txt') as puzzle_file:
     puzzle_input = [line.split(' ') for line in puzzle_file.read().split('\n')]
 
@@ -79,22 +81,6 @@ def read_instructions(instructions, i, times_to_loop):
         else:
             i += 1
 
-def debug_mode(instructions):
-    find_registers(instructions)
-    register_dict['a'] = 1
-    read_instructions(instructions, 0, 10)
-    for b in xrange(register_dict['b'], register_dict['c'] + 1, 17):
-        register_dict['f'] = 1
-        for d in xrange(2, register_dict['b'] + 1):
-            for e in xrange(2, register_dict['b'] + 1):
-                if register_dict['d'] * register_dict['e'] == register_dict['b']:
-                    register_dict['f'] = 0
-        if register_dict['f'] == 0:
-            register_dict['h'] += 1
-    return register_dict['h']
-    
-print debug_mode(puzzle_input)
-
 # set b 57              # set-up
 # set c b
 # jnz a 2
@@ -128,6 +114,26 @@ print debug_mode(puzzle_input)
 #    jnz 1 3            # else:
 #    sub b -17              b += 17
 #    jnz 1 -23
+
+import sympy
+
+def debug_mode(instructions):
+    find_registers(instructions)
+    register_dict['a'] = 1
+    read_instructions(instructions, 0, 10)
+    for b in xrange(register_dict['b'], register_dict['c'] + 1, 17):
+        register_dict['f'] = 1
+#        for d in xrange(2, register_dict['b'] + 1):
+#           for e in xrange(2, register_dict['b'] + 1):
+#               if register_dict['d'] * register_dict['e'] == register_dict['b']:
+#                   register_dict['f'] = 0
+        if not sympy.ntheory.primetest.isprime(b):
+            register_dict['h'] += 1
+    return register_dict['h']
+    
+print debug_mode(puzzle_input)
+
+
 
 # assert register_dict['e'] != register_dict['b'], "loop: %s, %s" % (l, register_dict)
 # AssertionError: loop: 422796, {'a': 1, 'c': 122700, 'b': 105700, 'e': 52850, 'd': 2, 'g': 0, 'f': 1, 'h': 0}
