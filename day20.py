@@ -74,11 +74,55 @@ def save_min(dictionary):
         if min_dist == manh_dist(coordinates):
             min_part = name
     closest_to_zero.append(min_part)
+    
+# --- Part Two ---
+
+# To simplify the problem further, the GPU would like to remove any particles that collide. Particles collide if their positions ever exactly match. Because particles are updated simultaneously, more than two particles can collide at the same time and place. Once particles collide, they are removed and cannot collide with anything else after that tick.
+
+# For example:
+
+# p=<-6,0,0>, v=< 3,0,0>, a=< 0,0,0>    
+# p=<-4,0,0>, v=< 2,0,0>, a=< 0,0,0>    -6 -5 -4 -3 -2 -1  0  1  2  3
+# p=<-2,0,0>, v=< 1,0,0>, a=< 0,0,0>    (0)   (1)   (2)            (3)
+# p=< 3,0,0>, v=<-1,0,0>, a=< 0,0,0>
+
+# p=<-3,0,0>, v=< 3,0,0>, a=< 0,0,0>    
+# p=<-2,0,0>, v=< 2,0,0>, a=< 0,0,0>    -6 -5 -4 -3 -2 -1  0  1  2  3
+# p=<-1,0,0>, v=< 1,0,0>, a=< 0,0,0>             (0)(1)(2)      (3)   
+# p=< 2,0,0>, v=<-1,0,0>, a=< 0,0,0>
+
+# p=< 0,0,0>, v=< 3,0,0>, a=< 0,0,0>    
+# p=< 0,0,0>, v=< 2,0,0>, a=< 0,0,0>    -6 -5 -4 -3 -2 -1  0  1  2  3
+# p=< 0,0,0>, v=< 1,0,0>, a=< 0,0,0>                       X (3)      
+# p=< 1,0,0>, v=<-1,0,0>, a=< 0,0,0>
+
+# ------destroyed by collision------    
+# ------destroyed by collision------    -6 -5 -4 -3 -2 -1  0  1  2  3
+# ------destroyed by collision------                      (3)         
+# p=< 0,0,0>, v=<-1,0,0>, a=< 0,0,0>
+
+# In this example, particles 0, 1, and 2 are simultaneously destroyed at the time and place marked X. On the next tick, particle 3 passes through unharmed.
+
+# How many particles are left after all collisions are resolved?
+
+def remove_collisions(dictionary):
+    positions = []
+    particle_collision = []
+    for particle, coordinates in dictionary.items():
+        positions.append(coordinates[0])
+    for coordinate in positions:
+        if positions.count(coordinate) > 1:
+            particle_collision.append(coordinate)
+    for particle, coordinates in dictionary.items():
+        if coordinates[0] in particle_collision:
+            del dictionary[particle]
 
 def long_run(dictionary, runs):
     for _ in xrange(runs):
         save_min(dictionary)
         update_particles(dictionary)
-
+        remove_collisions(dictionary)
+                    
 long_run(particle_dict, 1000)
-print max(set(closest_to_zero), key=closest_to_zero.count)
+#print max(set(closest_to_zero), key=closest_to_zero.count)
+print len(particle_dict)
