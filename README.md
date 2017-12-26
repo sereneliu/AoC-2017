@@ -1,9 +1,8 @@
 # Advent of Code 2017
 These are my solutions for [Advent of Code 2017](http://adventofcode.com/2017). 
 ## Why Python
-Although I learned a little Python in [Udacity's Intro to Programming Nanodegree](https://www.udacity.com/course/intro-to-programming-nanodegree--nd000), I have been mostly coding in HTML/CSS/JavaScript. Therefore, I thought I would use this chance to practice! My friend Daniel has been showing me ways to improve my code (which you can see on the Daniel branch).
-
-## Other Thoughts
+I learned Python basics in [Udacity's Intro to Programming Nanodegree](https://www.udacity.com/course/intro-to-programming-nanodegree--nd000), but before December 2017, I had been mostly coding in HTML/CSS/JS. Therefore, I used these puzzles to practice coding in Python. My friend [Daniel](https://github.com/ephemient) has been showing me ways to improve my code (which you can see on the [Daniel branch](https://github.com/sereneliu/AoC-2017/tree/Daniel)).
+## Lessons Learned
 I am learning so much from these puzzles each day! Highly recommend for anyone who is just starting out.
 
 * Day 01: [-1] to get the last element of a list
@@ -31,3 +30,6 @@ I am learning so much from these puzzles each day! Highly recommend for anyone w
 * Day 23: how to reconstruct and optimize code
 * Day 24: I hate recursion
 * Day 25: how to use tuples to shorten code
+## Next Steps
+* Complete all puzzles (missing Days 7 Part 2, 18 Part 2, 21, and 24 as of 12/26/17)
+* Optimize each puzzle so that each part could be solved under 15 seconds
