@@ -13,7 +13,21 @@ I am learning so much from these puzzles each day! Highly recommend for anyone w
 * Day 05: set j = i so that I can use the old value of i as j after modifying i
 * Day 06: how to detect loops, useful for a future puzzle
 * Day 07: set1.difference(set2) to find remaining elements
-* Day 08: dictionaries
+* Day 08: dictionaries (also eval/exec is awesome, but in most cases, I shouldn't use them)
 * Day 09: how to break strings apart and put them back together
 * Day 10: how to reverse elements in a list (also how to convert to ASCII & hexidecimal notations)
 * Day 11: find max w/o storing all values
+* Day 12: connected component (graph theory)
+* Day 13: how to code without simulation
+* Day 14: zfill, binary code
+* Day 15: pypy is awesome
+* Day 16: a more efficient way to detect loops
+* Day 17: only assign as many variables as needed
+* Day 18: think carefully about what happens with each if/elif/else statement
+* Day 19: isalpha()
+* Day 20: using sys.maxint for starting min
+* Day 21: plane wifi is too slow
+* Day 22: dict(zip())
+* Day 23: how to reconstruct and optimize code
+* Day 24: I hate recursion
+* Day 25: how to use tuples to shorten code
