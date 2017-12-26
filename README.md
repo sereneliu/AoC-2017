@@ -8,7 +8,7 @@ I am learning so much from these puzzles each day! Highly recommend for anyone w
 
 * Day 01: [-1] to get the last element of a list
 * Day 02: how to compare two elements in a list
-* Day 03: spent a long time on figuring out the formula for calculating the Manhattan Distance with little success before creating the spiral, which was easier and more useful for part 2...
+* Day 03: sometimes easier is better
 * Day 04: set() for unique elements of a list
 * Day 05: set j = i so that I can use the old value of i as j after modifying i
 * Day 06: how to detect loops, useful for a future puzzle
