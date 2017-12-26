@@ -1,3 +1,10 @@
+from __future__ import print_function
+from collections import defaultdict, namedtuple
+import sys
+
+if sys.version_info >= (3, 0):
+    xrange = range
+
 # --- Day 20: Particle Swarm ---
 
 # Suddenly, the GPU contacts you, asking for help. Someone has asked it to simulate too many particles, and it won't be able to finish them all in time to render the next frame at this rate.
@@ -33,48 +40,46 @@
 
 # Which particle will stay closest to position <0,0,0> in the long term?
 
-# test_coordinates = [[3, 2, 1], [2, 1, 0], [1, 2, 3]]
+Vector = namedtuple('Vector', ('x', 'y', 'z'))
+Point = namedtuple('Point', ('position', 'velocity', 'acceleration'))
 
-import sys
+def parse_vector(str):
+    begin = str.index('<') + 1
+    end = str.index('>', begin)
+    x, y, z = str[begin:end].split(',')
+    return Vector(int(x), int(y), int(z))
 
+def add_vector(a, b):
+    x, y, z = a
+    u, v, w = b
+    return Vector(x + u, y + v, z + w)
+
+def step(point):
+    position, velocity, acceleration = point
+    velocity = add_vector(velocity, acceleration)
+    position = add_vector(position, velocity)
+    return Point(position, velocity, acceleration)
+
+input_points = []
 with open('day20.txt') as puzzle_file:
-    puzzle_input = list(puzzle_file)
+    for line in puzzle_file:
+        position, velocity, acceleration = line.split()
+        input_points.append(Point(
+            parse_vector(position),
+            parse_vector(velocity),
+            parse_vector(acceleration)))
 
-particle_dict = {}
+points = list(input_points)
+for _ in xrange(400):
+    closest_distance = float('inf')
+    for i in range(len(points)):
+        points[i] = step(points[i])
+        x, y, z = points[i].position
+        distance = abs(x) + abs(y) + abs(z)
+        if distance < closest_distance:
+            closest_index, closest_distance = i, distance
+print(closest_index)
 
-def add_to_particle_dict(some_input):
-    num = 0
-    for particle in some_input:
-        particle = ''.join(c for c in particle if (c.isdigit()) or c in '-,')
-        particle = [int(coordinate) for coordinate in particle.split(',')]
-        particle_dict['particle ' + str(num)] = [[particle[0], particle[1], particle[2]], [particle[3], particle[4], particle[5]], [particle[6], particle[7], particle[8]]]
-        num += 1
-
-add_to_particle_dict(puzzle_input)
-
-def update_particles(dictionary):
-    for coordinates in dictionary.values():
-        coordinates[1][0] += coordinates[2][0]
-        coordinates[1][1] += coordinates[2][1]
-        coordinates[1][2] += coordinates[2][2]
-        coordinates[0][0] += coordinates[1][0]
-        coordinates[0][1] += coordinates[1][1]
-        coordinates[0][2] += coordinates[1][2]
-
-def manh_dist(coordinates):
-    return sum(abs(coordinate) for coordinate in coordinates[0])
-    
-closest_to_zero = []
-
-def save_min(dictionary):
-    min_part = ''
-    min_dist = sys.maxint
-    for name, coordinates in dictionary.items():
-        min_dist = min(manh_dist(coordinates), min_dist)
-        if min_dist == manh_dist(coordinates):
-            min_part = name
-    closest_to_zero.append(min_part)
-    
 # --- Part Two ---
 
 # To simplify the problem further, the GPU would like to remove any particles that collide. Particles collide if their positions ever exactly match. Because particles are updated simultaneously, more than two particles can collide at the same time and place. Once particles collide, they are removed and cannot collide with anything else after that tick.
@@ -105,24 +110,11 @@ def save_min(dictionary):
 
 # How many particles are left after all collisions are resolved?
 
-def remove_collisions(dictionary):
-    positions = []
-    particle_collision = []
-    for particle, coordinates in dictionary.items():
-        positions.append(coordinates[0])
-    for coordinate in positions:
-        if positions.count(coordinate) > 1:
-            particle_collision.append(coordinate)
-    for particle, coordinates in dictionary.items():
-        if coordinates[0] in particle_collision:
-            del dictionary[particle]
-
-def long_run(dictionary, runs):
-    for _ in xrange(runs):
-        save_min(dictionary)
-        update_particles(dictionary)
-        remove_collisions(dictionary)
-                    
-long_run(particle_dict, 1000)
-#print max(set(closest_to_zero), key=closest_to_zero.count)
-print len(particle_dict)
+points = list(input_points)
+for _ in xrange(40):
+    positions = defaultdict(int)
+    for i in range(len(points)):
+        points[i] = step(points[i])
+        positions[points[i].position] += 1
+    points = [point for point in points if positions[point.position] == 1]
+print(len(points))
