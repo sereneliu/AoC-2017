@@ -46,16 +46,16 @@ I am learning so much from these puzzles each day! Highly recommend for anyone w
 * Day 10: 0m0.008s  0m0.044s
 * Day 11: 0m0.008s  0m0.020s
 * Day 12: 0m0.012s  0m0.012s
-* Day 13: 
+* Day 13: 0m0.040s  8m+
 * Day 14: 
 * Day 15: 
-* Day 16: 
-* Day 17: 
-* Day 18: 
-* Day 19: 
-* Day 20: 
+* Day 16: 0m0.028s
+* Day 17: 0m0.016s  0m4.144s
+* Day 18: 0m0.012s
+* Day 19: 0m0.020s  0m0.020s
+* Day 20: 0m4.732s  0m4.940s
 * Day 21: 
-* Day 22: 
-* Day 23: 
+* Day 22: 0m0.020s  0m8.708s
+* Day 23: 0m0.236s  0m0.272s
 * Day 24: 
-* Day 25: 
+* Day 25: 0m6.188s
