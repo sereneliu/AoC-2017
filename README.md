@@ -1,7 +1,7 @@
 # Advent of Code 2017
 These are my solutions for [Advent of Code 2017](http://adventofcode.com/2017). 
 ## Why Python
-I learned Python basics in [Udacity's Intro to Programming Nanodegree](https://www.udacity.com/course/intro-to-programming-nanodegree--nd000), but before December 2017, I had been mostly coding in HTML/CSS/JS. Therefore, I used these puzzles to practice coding in Python. My friend [Daniel](https://github.com/ephemient) has been showing me ways to improve my code (which you can see on the [Daniel branch](https://github.com/sereneliu/AoC-2017/tree/Daniel)).
+I learned Python basics in [Udacity's Intro to Programming Nanodegree](https://www.udacity.com/course/intro-to-programming-nanodegree--nd000), but before December 2017, I had been mostly coding in HTML/CSS/JS. Therefore, I used these puzzles to practice coding in Python. Whenever stuck, I first consult Google for tips and tricks, then ask [a human being](https://github.com/ephemient) if that doesn't work. In general, I do not look at other people's answers on [reddit](https://www.reddit.com/r/adventofcode/) until I have completed my own version. A friend has been teaching me [ways to optimize my code](https://github.com/sereneliu/AoC-2017/tree/Daniel) after initial completion of each puzzle.
 ## Lessons Learned
 I am learning so much from these puzzles each day! Highly recommend for anyone who is just starting out.
 
@@ -32,7 +32,7 @@ I am learning so much from these puzzles each day! Highly recommend for anyone w
 * Day 25: how to use tuples to shorten code
 ## Next Steps
 * Complete all puzzles (missing Days 7 Part 2, 18 Part 2, 21, and 24 as of 12/26/17)
-* Optimize each puzzle so that each part could be solved under 15 seconds
+* Optimize the puzzles so that each part could be solved under 15 seconds, and besides the super difficult ones, under 250ms.
 ## Current Times
 * Day 01: 0m0.012s  0m0.016s
 * Day 02: 0m0.016s  0m0.020s
