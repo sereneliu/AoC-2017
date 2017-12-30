@@ -43,9 +43,9 @@ I am learning so much from these puzzles each day! Highly recommend for anyone w
 * Day 07: 0m0.004s
 * Day 08: 0m0.020s  0m0.020s
 * Day 09: 0m0.028s  0m0.032s
-* Day 10: 
-* Day 11: 
-* Day 12: 
+* Day 10: 0m0.008s  0m0.044s
+* Day 11: 0m0.008s  0m0.020s
+* Day 12: 0m0.012s  0m0.012s
 * Day 13: 
 * Day 14: 
 * Day 15: 
