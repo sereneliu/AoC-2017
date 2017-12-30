@@ -33,3 +33,29 @@ I am learning so much from these puzzles each day! Highly recommend for anyone w
 ## Next Steps
 * Complete all puzzles (missing Days 7 Part 2, 18 Part 2, 21, and 24 as of 12/26/17)
 * Optimize each puzzle so that each part could be solved under 15 seconds
+## Current Times
+* Day 01: 0m0.012s  0m0.016s
+* Day 02: 0m0.016s  0m0.020s
+* Day 03: 0m0.028s  0m0.008s
+* Day 04: 0m0.016s  0m0.012s
+* Day 05: 0m0.072s  0m5.244s
+* Day 06: 0m0.236s  0m0.236s
+* Day 07: 0m0.004s
+* Day 08: 0m0.020s  0m0.020s
+* Day 09: 0m0.028s  0m0.032s
+* Day 10: 
+* Day 11: 
+* Day 12: 
+* Day 13: 
+* Day 14: 
+* Day 15: 
+* Day 16: 
+* Day 17: 
+* Day 18: 
+* Day 19: 
+* Day 20: 
+* Day 21: 
+* Day 22: 
+* Day 23: 
+* Day 24: 
+* Day 25: 
