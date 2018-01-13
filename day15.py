@@ -120,6 +120,6 @@ def significant_sample(value_a, value_b, count):
         value_b = gen_B_criteria(value_b)
     return count
 
-print significant_sample(618, 814, 0)
+print significant_sample(618, 814, 0) # answer: 316
 
 # pypy: ~/pypy2-v5.9.0-linux64/bin/pypy

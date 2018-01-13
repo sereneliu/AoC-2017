@@ -50,7 +50,7 @@ def detect_loop(configuration):
         else:
             return len(configurations) + 1
 
-print detect_loop(input_list)
+print detect_loop(input_list) # answer: 5042
 
 # --- Part Two ---
 
@@ -63,4 +63,4 @@ print detect_loop(input_list)
 def re_detect(configuration):
     return len(configurations) - configurations.index(configuration)
 
-print re_detect(input_list)
+print re_detect(input_list) # answer: 1086

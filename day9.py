@@ -56,8 +56,8 @@
 # <{o"i!a,<{i<a>, 10 characters.
 # How many non-canceled characters are within the garbage in your puzzle input?
 
-puzzle_input = open("day9.txt", "r")
-puzzle_input = puzzle_input.read()
+with open('day9.txt') as puzzle_file:
+    puzzle_input = puzzle_file.read()
 
 def remove_garbage(some_input):
     garbage_characters = 0
@@ -68,6 +68,8 @@ def remove_garbage(some_input):
         some_input = some_input[0:some_input.index("<")] + some_input[some_input.index(">") + 1:]
     print garbage_characters
     return some_input
+
+# print remove_garbage(puzzle_input) # answer: 3838
 
 def score_groups(some_input):
     input_wo_garbage = remove_garbage(some_input)
@@ -81,4 +83,4 @@ def score_groups(some_input):
             score -= 1
     return total_score
 
-print score_groups(puzzle_input)
+print score_groups(puzzle_input) # answer: 7616

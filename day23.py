@@ -56,7 +56,7 @@ def find_registers(instructions):
 #             i += 1
 #     return mul_instruction
 
-# print read_instructions(puzzle_input)
+# print read_instructions(puzzle_input) # answer: 3025
 
 def read_instructions(instructions, i, times_to_loop):
     for l in xrange(times_to_loop):
@@ -131,9 +131,7 @@ def debug_mode(instructions):
             register_dict['h'] += 1
     return register_dict['h']
     
-print debug_mode(puzzle_input)
-
-
+print debug_mode(puzzle_input) # answer: 915
 
 # assert register_dict['e'] != register_dict['b'], "loop: %s, %s" % (l, register_dict)
 # AssertionError: loop: 422796, {'a': 1, 'c': 122700, 'b': 105700, 'e': 52850, 'd': 2, 'g': 0, 'f': 1, 'h': 0}

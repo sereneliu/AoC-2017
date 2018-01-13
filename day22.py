@@ -146,7 +146,7 @@ def burst(center_of_map, n):
         x, y = directions[direction](x, y)
     return infected_bursts
           
-# print burst(puzzle_input, 10000)
+# print burst(puzzle_input, 10000) # answer: 5565
 
 # --- Part Two ---
 
@@ -261,4 +261,4 @@ def burst_2(center_of_map, n):
         x, y = directions[direction](x, y)
     return infected_bursts
 
-print burst_2(puzzle_input, 10000000)
+print burst_2(puzzle_input, 10000000) # answer: 2511978

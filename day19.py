@@ -69,4 +69,4 @@ def find_the_way(maze):
           steps += 1
      return ''.join(collection), steps
           
-print find_the_way(puzzle_input)
+print find_the_way(puzzle_input) # answer: ('SXWAIBUZY', 16676)

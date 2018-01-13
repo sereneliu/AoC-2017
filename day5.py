@@ -27,6 +27,9 @@
 
 test = [0, 3, 0, 1, -3]
 
+with open('day5.txt') as puzzle_file:
+    puzzle_input = [int(num) for num in puzzle_file.read().split('\n')]
+
 def steps_to_exit(instructions):
     steps = 0
     i = 0
@@ -37,11 +40,7 @@ def steps_to_exit(instructions):
         steps += 1
     return steps
 
-puzzle_input = open("day5.txt", "r")
-puzzle_input = puzzle_input.read()
-puzzle_input = [int(num) for num in puzzle_input.split("\n")]
-
-# print steps_to_exit(puzzle_input)
+print steps_to_exit(puzzle_input) # answer: 394829
 
 # --- Part Two ---
 
@@ -64,4 +63,4 @@ def more_steps_to_exit(instructions):
         steps += 1
     return steps
 
-print more_steps_to_exit(puzzle_input)
+print more_steps_to_exit(puzzle_input) # answer: 31150702

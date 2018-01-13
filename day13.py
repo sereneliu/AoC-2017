@@ -278,8 +278,8 @@ test_input = '''0: 3
 
 test_input = test_input.split('\n')
 
-puzzle_input = open('day13.txt', 'r')
-puzzle_input = puzzle_input.read().split('\n')
+with open('day13.txt') as puzzle_file:
+    puzzle_input = puzzle_file.read().split('\n')
 
 firewall_dict = {}
 
@@ -321,7 +321,10 @@ def move_through_firewall(firewall, dictionary, delay):
 #    severity = 0
 #    for layer in caught:
 #        severity += layer * firewall_dict[layer]
+#    return severity
 #    return caught
+
+# print move_through_firewall(setup_firewall(puzzle_input), firewall_dict, 0) # answer: 648
 
 def not_caught(firewall, dictionary):
     delay = 0
@@ -331,4 +334,4 @@ def not_caught(firewall, dictionary):
         delay += 1
     return delay - 1
         
-print not_caught(setup_firewall(puzzle_input), firewall_dict)
+print not_caught(setup_firewall(puzzle_input), firewall_dict) # answer: 3933124

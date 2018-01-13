@@ -25,9 +25,8 @@
 # ne,ne,s,s is 2 steps away (se,se).
 # se,sw,se,sw,sw is 3 steps away (s,s,sw).
 
-puzzle_input = open("day11.txt", "r")
-puzzle_input = puzzle_input.read()
-puzzle_input = puzzle_input.split(",")
+with open('day11.txt') as puzzle_file:
+    puzzle_input = puzzle_file.read().split(',')
 
 instruction_coordinates = []
 
@@ -54,7 +53,7 @@ def shortest_dist(x, y, z, instructions):
     end = end_hex(x, y, z, instructions)
     return max(abs(end[0] - start[0]), abs(end[1] - start[1]), abs(end[2] - start[2]))
 
-print shortest_dist(0, 0, 0, puzzle_input)
+print shortest_dist(0, 0, 0, puzzle_input) # answer: 670
 
 # --- Part Two ---
 
@@ -68,4 +67,4 @@ def longest_dist(x, y, z, coordinates):
         max_dist = max(max_dist, max(abs(end[0] - start[0]), abs(end[1] - start[1]), abs(end[2] - start[2])))
     return max_dist
 
-print longest_dist(0, 0, 0, instruction_coordinates)
+print longest_dist(0, 0, 0, instruction_coordinates) # answer: 1426

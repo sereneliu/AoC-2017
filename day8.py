@@ -29,9 +29,8 @@ a inc 1 if b < 5
 c dec -10 if a >= 1
 c inc -20 if c == 10'''
 
-puzzle_input = open('day8.txt', 'r')
-puzzle_input = puzzle_input.read()
-instructions_list = puzzle_input.split('\n')
+with open('day8.txt') as puzzle_file:
+    puzzle_input = puzzle_file.read().split('\n')
 
 registers = set()
 reg_values = {}
@@ -64,4 +63,4 @@ def run_instructions(some_list):
                 max_value_ever = max(reg_values.values())
     return max(reg_values.values()), max_value_ever
 
-print run_instructions(instructions_list)
+print run_instructions(puzzle_input) # (4902, 7037)

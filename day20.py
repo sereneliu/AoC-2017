@@ -124,5 +124,5 @@ def long_run(dictionary, runs):
         remove_collisions(dictionary)
                     
 long_run(particle_dict, 1000)
-#print max(set(closest_to_zero), key=closest_to_zero.count)
-print len(particle_dict)
+print max(set(closest_to_zero), key=closest_to_zero.count) # answer: 931
+print len(particle_dict) # answer: 404

@@ -22,8 +22,8 @@ test_programs = 'abcde'
 test_input = 's1,x3/4,pe/b'.split(',')
 
 puzzle_programs = 'abcdefghijklmnop'
-puzzle_input = open('day16.txt', 'r')
-puzzle_input = puzzle_input.read().split(',')
+with open('day16.txt') as puzzle_file:
+    puzzle_input = puzzle_file.read().split(',')
 
 def spin(size, programs):
     programs = programs[-1 * size:] + programs[0:-1 * size]
@@ -51,7 +51,7 @@ def dance_moves(programs, instructions):
             programs = partner(instruction[1:instruction.index('/')], instruction[instruction.index('/') + 1:], programs)
     return programs
 
-# print dance_moves(puzzle_programs, puzzle_input)
+# print dance_moves(puzzle_programs, puzzle_input) # answer: iabmedjhclofgknp
 
 # --- Part Two ---
 

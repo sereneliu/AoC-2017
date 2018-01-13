@@ -31,8 +31,8 @@
 
 # How many programs are in the group that contains program ID 0?
 
-puzzle_input = open('day12.txt', 'r')
-puzzle_input = puzzle_input.read().split('\n')
+with open('day12.txt') as puzzle_file:
+    puzzle_input = puzzle_file.read().split('\n')
 
 programs = {}
 
@@ -50,7 +50,7 @@ def find_programs(num, group_containing_n):
             find_programs(connected, group_containing_n)
     return group_containing_n
 
-print len(find_programs(str(0), set()))
+print len(find_programs(str(0), set())) # answer: 239
 
 # --- Part Two ---
 
@@ -72,4 +72,4 @@ def find_groups(some_input):
             programs_remaining = programs_remaining.difference(group_num)
     return len(groups)
 
-print find_groups(puzzle_input)
+print find_groups(puzzle_input) # answer: 215

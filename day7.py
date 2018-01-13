@@ -68,7 +68,7 @@ def bottom_tower(some_input):
         sub_towers.update(sub_tower[1:])
     return (all_towers.difference(sub_towers))
 
-# print bottom_tower(input_list)
+print bottom_tower(input_list) # answer: tknk
 
 # --- Part Two ---
 
@@ -106,4 +106,4 @@ def balance_towers_above(some_input):
     unique_weights = list(unique_weights)
     return abs(unique_weights[1] - unique_weights[0])
     
-print balance_towers_above(input_list)
+# print balance_towers_above(input_list)

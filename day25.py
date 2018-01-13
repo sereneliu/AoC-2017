@@ -92,4 +92,4 @@ def diagnostic_checksum(steps):
     # print step, state, pos, "\t", format_tape(tape, pos)
   return sum(tape.values())
 
-print diagnostic_checksum(12964419)
+print diagnostic_checksum(12964419) # answer: 3145

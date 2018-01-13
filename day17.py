@@ -37,7 +37,7 @@ def spinlock(steps):
         pos = circular_buffer.index(n)
     return circular_buffer[circular_buffer.index(2017) + 1]
 
-print spinlock(335)
+print spinlock(335) # answer: 1282
 
 # --- Part Two ---
 
@@ -60,4 +60,4 @@ def spinlock_pos1(steps):
             value = n
     return value
 
-print spinlock_pos1(335)
+print spinlock_pos1(335) # answer: 27650600

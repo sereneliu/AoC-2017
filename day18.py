@@ -86,4 +86,4 @@ def read_instructions(instructions):
         else:
             i += 1
 
-print read_instructions(puzzle_input)
+print read_instructions(puzzle_input) # answer: 7071

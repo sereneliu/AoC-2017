@@ -30,7 +30,7 @@
 test_input = 'flqrgnkx'
 puzzle_input = 'wenycdww'
 
-from day10 import knot_hash
+from day10_v2 import knot_hash
 
 def knot_hash_grid(puzzle_input):
     used_squares = 0
@@ -49,10 +49,10 @@ def knot_hash_grid(puzzle_input):
                 bit = '.'
             row.append(bit)
         grid.append(row)
-#    print used_squares
+#    return used_squares
     return grid
 
-# print knot_hash_grid(puzzle_input)
+# print knot_hash_grid(puzzle_input) # answer: 8226
 
 # --- Part Two ---
 
@@ -111,4 +111,4 @@ def find_regions(some_list):
             regions_remaining = regions_remaining.difference(region_key)
     return len(regions)
 
-print find_regions(connection_list)
+print find_regions(connection_list) # answer: 1128

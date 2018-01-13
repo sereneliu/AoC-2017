@@ -73,10 +73,10 @@ def a_knot_hash_round(some_list, some_length):
         pos += (length + skip)
         pos = pos % len(some_list)
         skip += 1
-#    print some_list[0] * some_list[1]
+    # print some_list[0] * some_list[1]
     return some_list
 
-# print a_knot_hash_round(puzzle_list, puzzle_lengths)
+# print a_knot_hash_round(puzzle_list, puzzle_lengths) # answer: 11375
 
 # --- Part Two ---
 
@@ -132,4 +132,4 @@ def knot_hash(some_list, some_length):
 # print knot_hash(puzzle_list, '1,2,3')
 # print knot_hash(puzzle_list, '1,2,4')
 
-print knot_hash(puzzle_list, puzzle_input)
+print knot_hash(puzzle_list, puzzle_input) # answer: e0387e2ad112b7c2ef344e44885fe4d8
