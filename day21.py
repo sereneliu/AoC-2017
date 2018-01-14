@@ -110,11 +110,14 @@ def rotate(grid):
         new_grid = grid[2][0] + grid[1][0] + grid[0][0] + '/' + grid[2][1] + grid[1][1] + grid[0][1] + '/' + grid[2][2] + grid[1][2] + grid[0][2]
     return new_grid
 
-def find_match(grid):
+def find_match(rules, grid):
     transformations = [grid, flip(grid), rotate(grid), flip(rotate(grid)), rotate(rotate(grid)), flip(rotate(rotate(grid))), rotate(rotate(rotate(grid))), flip(rotate(rotate(rotate(grid))))]
     for transformation in transformations:
-        if transformation in book_of_rules.keys():
+        if transformation in rules.keys():
             return transformation
+
+def enhance(rules, grid):
+    return rules[grid]
 
 example = '#..#/..../..../#..#'
 # ##.|##.
@@ -125,9 +128,15 @@ example = '#..#/..../..../#..#'
 # #..|#..
 # ...|...
 
+example_rules = {'../.#': '##./#../...',
+'.#./..#/###': '#..#/..../..../#..#'}
+
 def divide(grid):
     grid = grid.split('/')
     vert_split_grid = []
+    horizon_split_grid = []
+    new_split_grid = []
+    enhanced_grid = []
     if len(grid) % 2 == 0:
         for row in xrange(0, len(grid), 2):
             vert_split_grid.append(grid[row] + '/' + grid[row+1])
@@ -135,14 +144,25 @@ def divide(grid):
         for row in xrange(0, len(grid), 3):
             vert_split_grid.append(grid[row] + '/' + grid[row+1] + '/' + grid[row+2])
     vert_split_grid = [rows.split('/') for rows in vert_split_grid]
-    return vert_split_grid
+    if len(vert_split_grid) % 2 == 0:
+        for pos in xrange(0, len(grid), 2):
+            for rows in vert_split_grid:
+                for row in rows:
+                    horizon_split_grid.append(row[pos] + row[pos+1])
+    if len(vert_split_grid) % 3 == 0:
+        for pos in xrange(0, len(grid), 3):
+            for rows in vert_split_grid:
+                for row in rows:
+                    horizon_split_grid.append(row[pos] + row[pos+1] + row[pos+2])
+    for n in xrange(0, len(horizon_split_grid), 2):
+        new_split_grid.append(horizon_split_grid[n] + '/' + horizon_split_grid[n+1])
+    for new_grid in new_split_grid:
+        enhanced_grid.append(enhance(example_rules, find_match(example_rules, new_grid)))
+    print '/'.join(enhanced_grid)
 
 print divide(example)
 
-def enhance(grid):
-    return book_of_rules[grid]
-
 def iterate(grid):
-    return enhance(find_match(grid))
+    return enhance(book_of_rules, find_match(book_of_rules, grid))
 
 print iterate('.#./..#/###')
