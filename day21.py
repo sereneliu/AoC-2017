@@ -102,15 +102,6 @@ def flip(grid):
     grid[0], grid[-1] = grid[-1], grid[0]
     return '/'.join(grid)
 
-# def horizontal_flip(grid):
-#    grid = grid.split('/')
-#    new_grid = []
-#    for line in grid:
-#        line = list(line)
-#        line[0], line[-1] = line[-1], line[0]
-#        new_grid.append(''.join(line))
-#    return '/'.join(new_grid)
-
 def rotate(grid):
     grid = grid.split('/')
     if len(grid) == 2:
@@ -120,27 +111,10 @@ def rotate(grid):
     return new_grid
 
 def find_match(grid):
-    if grid not in book_of_rules.keys():
-        if flip(grid) not in book_of_rules.keys():
-            if rotate(grid) not in book_of_rules.keys():
-                if flip(rotate(grid)) not in book_of_rules.keys():
-                    if rotate(rotate(grid)) not in book_of_rules.keys():
-                        if flip(rotate(rotate(grid))) not in book_of_rules.keys():
-                            if rotate(rotate(rotate(grid))) not in book_of_rules.keys():
-                                grid = flip(rotate(rotate(rotate(grid))))
-                            else:
-                                grid = rotate(rotate(rotate(grid)))
-                        else:
-                            grid = flip(rotate(rotate(grid)))
-                    else:
-                        grid = rotate(rotate(grid))
-                else:
-                    grid = flip(rotate(grid))
-            else:
-               grid = rotate(grid) 
-        else: 
-            grid = flip(grid)
-    return grid
+    transformations = [grid, flip(grid), rotate(grid), flip(rotate(grid)), rotate(rotate(grid)), flip(rotate(rotate(grid))), rotate(rotate(rotate(grid))), flip(rotate(rotate(rotate(grid))))]
+    for transformation in transformations:
+        if transformation in book_of_rules.keys():
+            return transformation
 
 example = '#..#/..../..../#..#'
 # ##.|##.
@@ -153,15 +127,15 @@ example = '#..#/..../..../#..#'
 
 def divide(grid):
     grid = grid.split('/')
-    new_grids = []
-    for row in grid:
-        if len(row) % 2 == 0:
-            for x in xrange(0, len(row), 2):
-                new_grids.append(row[x] + row[x+1])
-        if len(row) % 3 == 0:
-            for x in xrange(0, len(row), 3):
-                new_grids.append(row[x] + row[x+1] + row[x+2])
-    return new_grids
+    vert_split_grid = []
+    if len(grid) % 2 == 0:
+        for row in xrange(0, len(grid), 2):
+            vert_split_grid.append(grid[row] + '/' + grid[row+1])
+    if len(grid) % 3 == 0:
+        for row in xrange(0, len(grid), 3):
+            vert_split_grid.append(grid[row] + '/' + grid[row+1] + '/' + grid[row+2])
+    vert_split_grid = [rows.split('/') for rows in vert_split_grid]
+    return vert_split_grid
 
 print divide(example)
 
@@ -172,64 +146,3 @@ def iterate(grid):
     return enhance(find_match(grid))
 
 print iterate('.#./..#/###')
-# print '.#./..#/###'
-# print '.#./..#/###' in book_of_rules.keys()
-# print flip('.#./..#/###')
-# print flip('.#./..#/###') in book_of_rules.keys()
-# print rotate('.#./..#/###')
-# print rotate('.#./..#/###') in book_of_rules.keys()
-# print flip(rotate('.#./..#/###'))
-# print flip(rotate('.#./..#/###')) in book_of_rules.keys()
-# print rotate(rotate('.#./..#/###'))
-# print rotate(rotate('.#./..#/###')) in book_of_rules.keys()
-# print flip(rotate(rotate('.#./..#/###')))
-# print flip(rotate(rotate('.#./..#/###'))) in book_of_rules.keys()
-# print rotate(rotate(rotate('.#./..#/###')))
-# print rotate(rotate(rotate('.#./..#/###'))) in book_of_rules.keys()
-# print flip(rotate(rotate(rotate('.#./..#/###'))))
-# print flip(rotate(rotate(rotate('.#./..#/###')))) in book_of_rules.keys()
-
-# original
-# 12
-# 34
-
-# vertical flip
-# 21
-# 43
-
-# rotate
-# 24
-# 13
-
-# flip rotate
-# 42
-# 31
-
-# rotate x2
-# 43
-# 21
-
-# flip rotate x2 // horizontal flip
-# 34
-# 12
-
-# rotate x3
-# 31
-# 42
-
-# flip rotate x3
-# 13
-# 24
-
-# from Daniel
-# 21
-# 34
-
-# 43
-# 12
-
-# 14
-# 23
-
-# 32
-# 41
