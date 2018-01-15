@@ -120,6 +120,11 @@ def enhance(rules, grid):
     return rules[grid]
 
 example = '#..#/..../..../#..#'
+# #..#
+# ....
+# ....
+# #..#
+
 # ##.|##.
 # #..|#..
 # ...|...
@@ -133,47 +138,29 @@ example_rules = {'../.#': '##./#../...',
 
 def divide(rules, grid):
     grid = grid.split('/')
-    vert_split_grid = []
-    horizon_split_grid = []
-    new_split_grid = []
-    enhanced_grid = []
-    final_grid = []
+    skip = 0
+    new_grids = []
+    formatted_new_grids = []
     if len(grid) % 2 == 0:
-        for row in xrange(0, len(grid), 2):
-            vert_split_grid.append(grid[row] + '/' + grid[row+1])
-    if len(grid) % 3 == 0:
-        for row in xrange(0, len(grid), 3):
-            vert_split_grid.append(grid[row] + '/' + grid[row+1] + '/' + grid[row+2])
-    vert_split_grid = [rows.split('/') for rows in vert_split_grid]
-    if len(vert_split_grid) == 1:
-        if len(vert_split_grid[0][0]) == 2:
-            new_split_grid.append(vert_split_grid[0][0] + '/' + vert_split_grid[0][1])
-        else:
-            new_split_grid.append(vert_split_grid[0][0] + '/' + vert_split_grid[0][1] + '/' + vert_split_grid[0][2])
-    if len(vert_split_grid) % 2 == 0:
-        for pos in xrange(0, len(grid), 2):
-            for rows in vert_split_grid:
-                for row in rows:
-                    horizon_split_grid.append(row[pos] + row[pos+1])
-        for n in xrange(0, len(horizon_split_grid), 2):
-            new_split_grid.append(horizon_split_grid[n] + '/' + horizon_split_grid[n+1])
-    if len(vert_split_grid) % 3 == 0:
-        for pos in xrange(0, len(grid), 3):
-            for rows in vert_split_grid:
-                for row in rows:
-                    horizon_split_grid.append(row[pos] + row[pos+1] + row[pos+2])
-        for n in xrange(0, len(horizon_split_grid), 3):
-            new_split_grid.append(horizon_split_grid[n] + '/' + horizon_split_grid[n+1] + '/' + horizon_split_grid[n+2])
-    for new_grid in new_split_grid:
-        enhanced_grid.append(enhance(rules, find_match(rules, new_grid)))
-    if len(enhanced_grid) > 1:
-        enhanced_grid = [enhanced_grid[:len(enhanced_grid)/2], enhanced_grid[len(enhanced_grid)/2:]]
-        for pos in xrange(0, len(enhanced_grid[0])):
-            for grids in enhanced_grid:
-                final_grid.append(grids[pos])
-    else:
-        final_grid = enhanced_grid
-    return '/'.join(final_grid)
+        skip = 2
+    elif len(grid) % 3 == 0:
+        skip = 3
+    for rows in xrange(0, len(grid), skip):
+        for pos in xrange(0, len(grid), skip):
+            for row in xrange(len(grid[rows:rows+skip])):
+                new_grids.append(grid[rows:rows+skip][row][pos:pos+skip])
+    for pos in xrange(0, len(new_grids), skip):
+        new_grid = []
+        for n in xrange(0, skip):
+            new_grid.append(new_grids[pos+n])
+        formatted_new_grids.append('/'.join(new_grid))
+    return formatted_new_grids
 
-print divide(example_rules, example)
-# print divide(book_of_rules, divide(book_of_rules, '.#./..#/###'))
+def enhanced_grid(rules, grid):
+    enhanced_grid = []
+    for new_grid in divide(rules, grid):
+        enhanced_grid.append(enhance(rules, find_match(rules, new_grid)))
+    return enhanced_grid
+
+print enhanced_grid(example_rules, example)
+print enhanced_grid(book_of_rules, '.#./..#/###')
