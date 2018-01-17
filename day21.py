@@ -143,10 +143,10 @@ def divide(rules, grid):
     skip = 0
     new_grids = []
     formatted_new_grids = []
-    if len(grid) % 3 == 0:
-        skip = 3
-    elif len(grid) % 2 == 0:
+    if len(grid) % 2 == 0:
         skip = 2
+    elif len(grid) % 3 == 0:
+        skip = 3
     for rows in xrange(0, len(grid), skip):
         for pos in xrange(0, len(grid), skip):
             for row in xrange(len(grid[rows:rows+skip])):
@@ -186,10 +186,20 @@ def join_grid(grids):
 
 def iterations(rules, grid, num):
     end_grid = join_grid(enhanced_grid(rules, grid))
+    print end_grid
     if num > 1:
         num -= 1
         end_grid = iterations(rules, end_grid, num)
     return end_grid
 
-# print join_grid(enhanced_grid(example_rules, example))
+# print iterations(example_rules, '.#./..#/###', 2).count('#')
 print iterations(book_of_rules, '.#./..#/###', 5).count('#')
+
+# ...#/##.#/#..#/.#..
+# ...#/##.#/#..#/.#..
+# ....../#..#../..#..#/#....#/.....#/...#..
+# ....../#..#../..#..#/....../#..#../..#..#
+# print '..#..#.../..#..##.#/#..#...../..#..#.../..#..##../#..#....#/.....#..#/#.#..#..#/...#..#..'.count('#')
+# print '..#..#.../..#..##.#/#..#...../..#..#.../..#..##.#/#..#...../..#..#.../..#..##.#/#..#.....'.count('#')
+# print '###.###.####/#..##..##.#./..#...#...##/.#...#..#..#/###.###.##.#/#..##..#####/..#...#.###./.#...#..###./#######.###./#.#.#..##..#/..##..#...#./#..#.#...#..'.count('#')
+# print '###.###.####/#..##..##.#./..#...#...##/.#...#..#..#/###.###.####/#..##..##.#./..#...#...##/.#...#..#..#/###.###.####/#..##..##.#./..#...#...##/.#...#..#..#'.count('#')
