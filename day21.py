@@ -84,6 +84,11 @@
 
 # How many pixels stay on after 5 iterations?
 
+example = '#..#/..../..../#..#'
+
+example_rules = {'../.#': '##./#../...',
+'.#./..#/###': '#..#/..../..../#..#'}
+
 import math
 
 with open('day21.txt') as puzzle_file:
@@ -121,23 +126,6 @@ def find_match(rules, grid):
 def enhance(rules, grid):
     return rules[grid]
 
-example = '#..#/..../..../#..#'
-# #..#
-# ....
-# ....
-# #..#
-
-# ##.|##.
-# #..|#..
-# ...|...
-# ---+---
-# ##.|##.
-# #..|#..
-# ...|...
-
-example_rules = {'../.#': '##./#../...',
-'.#./..#/###': '#..#/..../..../#..#'}
-
 def divide(rules, grid):
     grid = grid.split('/')
     skip = 0
@@ -174,8 +162,8 @@ def join_grid(grids):
     side_len = int(math.sqrt(len(split_grids)))
     for rows in xrange(0, len(split_grids), side_len):
         for pos in xrange(0, len(split_grids[rows])):
-            for row in xrange(side_len):
-                reorder_grid.append(split_grids[row][pos])
+            for row in xrange(0, side_len):
+                reorder_grid.append(split_grids[rows:rows+side_len][row][pos])
     combine_row = []
     for pos in xrange(0, len(reorder_grid), side_len):
         combine_row.append(reorder_grid[pos:pos+side_len])
@@ -186,7 +174,6 @@ def join_grid(grids):
 
 def iterations(rules, grid, num):
     end_grid = join_grid(enhanced_grid(rules, grid))
-    print end_grid
     if num > 1:
         num -= 1
         end_grid = iterations(rules, end_grid, num)
@@ -194,12 +181,3 @@ def iterations(rules, grid, num):
 
 # print iterations(example_rules, '.#./..#/###', 2).count('#')
 print iterations(book_of_rules, '.#./..#/###', 5).count('#')
-
-# ...#/##.#/#..#/.#..
-# ...#/##.#/#..#/.#..
-# ....../#..#../..#..#/#....#/.....#/...#..
-# ....../#..#../..#..#/....../#..#../..#..#
-# print '..#..#.../..#..##.#/#..#...../..#..#.../..#..##../#..#....#/.....#..#/#.#..#..#/...#..#..'.count('#')
-# print '..#..#.../..#..##.#/#..#...../..#..#.../..#..##.#/#..#...../..#..#.../..#..##.#/#..#.....'.count('#')
-# print '###.###.####/#..##..##.#./..#...#...##/.#...#..#..#/###.###.##.#/#..##..#####/..#...#.###./.#...#..###./#######.###./#.#.#..##..#/..##..#...#./#..#.#...#..'.count('#')
-# print '###.###.####/#..##..##.#./..#...#...##/.#...#..#..#/###.###.####/#..##..##.#./..#...#...##/.#...#..#..#/###.###.####/#..##..##.#./..#...#...##/.#...#..#..#'.count('#')
