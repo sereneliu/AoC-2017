@@ -141,10 +141,10 @@ def divide(rules, grid):
     skip = 0
     new_grids = []
     formatted_new_grids = []
-    if len(grid) % 2 == 0:
-        skip = 2
-    elif len(grid) % 3 == 0:
+    if len(grid) % 3 == 0:
         skip = 3
+    elif len(grid) % 2 == 0:
+        skip = 2
     for rows in xrange(0, len(grid), skip):
         for pos in xrange(0, len(grid), skip):
             for row in xrange(len(grid[rows:rows+skip])):
