@@ -162,8 +162,8 @@ def join_grid(grids):
     side_len = int(math.sqrt(len(split_grids)))
     for rows in xrange(0, len(split_grids), side_len):
         for pos in xrange(0, len(split_grids[rows])):
-            for row in xrange(0, side_len):
-                reorder_grid.append(split_grids[rows:rows+side_len][row][pos])
+            for row in xrange(rows, rows + side_len):
+                reorder_grid.append(split_grids[row][pos])
     combine_row = []
     for pos in xrange(0, len(reorder_grid), side_len):
         combine_row.append(reorder_grid[pos:pos+side_len])
@@ -180,4 +180,9 @@ def iterations(rules, grid, num):
     return end_grid
 
 # print iterations(example_rules, '.#./..#/###', 2).count('#')
-print iterations(book_of_rules, '.#./..#/###', 5).count('#')
+# print iterations(book_of_rules, '.#./..#/###', 5).count('#')
+
+# --- Part Two ---
+# How many pixels stay on after 18 iterations?
+
+print iterations(book_of_rules, '.#./..#/###', 18).count('#')
