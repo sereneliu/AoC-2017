@@ -31,7 +31,7 @@ I am learning so much from these puzzles each day! Highly recommend for anyone w
 * Day 24: I hate recursion
 * Day 25: how to use tuples to shorten code
 ## Next Steps
-* Complete all puzzles (missing Days 7 Part 2, 18 Part 2, 21, and 24 as of 12/26/17)
+* Complete all puzzles (missing 7.5, 18.5, 24 as of 1/17/18)
 * Optimize the puzzles so that each part could be solved under 15 seconds, and besides the super difficult ones, under 250ms.
 ## Current Times
 * Day 01: 0m0.012s  0m0.016s
@@ -54,7 +54,7 @@ I am learning so much from these puzzles each day! Highly recommend for anyone w
 * Day 18: 0m0.012s
 * Day 19: 0m0.020s  0m0.020s
 * Day 20: 0m4.732s  0m4.940s
-* Day 21: 
+* Day 21: 0m0.020s  0m16.404s
 * Day 22: 0m0.020s  0m8.708s
 * Day 23: 0m0.236s  0m0.272s
 * Day 24: 
