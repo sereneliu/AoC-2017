@@ -84,6 +84,8 @@
 
 # How many pixels stay on after 5 iterations?
 
+import math
+
 with open('day21.txt') as puzzle_file:
     puzzle_input = puzzle_file.read().split('\n')
 
@@ -162,5 +164,32 @@ def enhanced_grid(rules, grid):
         enhanced_grid.append(enhance(rules, find_match(rules, new_grid)))
     return enhanced_grid
 
-print enhanced_grid(example_rules, example)
-print enhanced_grid(book_of_rules, '.#./..#/###')
+def join_grid(grids):
+    split_grids = []
+    reorder_grid = []
+    final_grid = []
+    for grid in grids:
+        grid = grid.split('/')
+        split_grids.append(grid)
+    side_len = int(math.sqrt(len(split_grids)))
+    for rows in xrange(0, len(split_grids), side_len):
+        for pos in xrange(0, len(split_grids[rows])):
+            for row in xrange(side_len):
+                reorder_grid.append(split_grids[row][pos])
+    combine_row = []
+    for pos in xrange(0, len(reorder_grid), side_len):
+        combine_row.append(reorder_grid[pos:pos+side_len])
+    for row in combine_row:
+        final_grid.append(''.join(row))
+    final_grid = '/'.join(final_grid)
+    return final_grid
+
+def iterations(rules, grid, num):
+    end_grid = join_grid(enhanced_grid(rules, grid))
+    if num > 1:
+        num -= 1
+        end_grid = iterations(rules, end_grid, num)
+    return end_grid
+
+# print join_grid(enhanced_grid(example_rules, example))
+print iterations(book_of_rules, '.#./..#/###', 5).count('#')
