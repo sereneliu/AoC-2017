@@ -59,13 +59,15 @@
 
 # Given that exactly one program is the wrong weight, what would its weight need to be to balance the entire tower?
 
-puzzle_input = open("day7.txt", "r")
+puzzle_input = open("day7_test.txt", "r")
 puzzle_input = puzzle_input.read()
 puzzle_input = puzzle_input.split('\n')
 
-towers_with_subtowers = {}
+tower_weights = {}
+parent_towers = {}
+child_towers = {}
 
-def find_subtowers(towers):
+def create_tower_dicts(towers):
     for tower in towers:
         bottom_tower = tower[0:tower.index(' ')]
         weight = tower[tower.index('(') + 1:tower.index(')')]
@@ -74,17 +76,27 @@ def find_subtowers(towers):
             all_subtowers = tower[tower.index('>') + 2:]
             for subtower in all_subtowers.split(', '):
                 subtowers.append(subtower)
-        towers_with_subtowers[bottom_tower] = (weight, subtowers)
+                parent_towers[subtower] = bottom_tower
+        tower_weights[bottom_tower] = weight
+        child_towers[bottom_tower] = subtowers
 
-def find_bottom_tower(tower_dict):
+def find_tops_and_bottom(tower_dict):
     bottom_towers = set()
     subtowers = set()
+    top_towers = set()
     for key, value in tower_dict.items():
-        if value[1] != []:
+        if value != []:
             bottom_towers.add(key)
-            for subtower in value[1]:
+            for subtower in value:
                 subtowers.add(subtower)
-    return bottom_towers.difference(subtowers)
+        else:
+            top_towers.add(key)
+    return bottom_towers.difference(subtowers), top_towers
 
-find_subtowers(puzzle_input)
-print find_bottom_tower(towers_with_subtowers) # answer: eugwuhl
+create_tower_dicts(puzzle_input)
+print tower_weights
+print parent_towers
+print child_towers
+bottom_tower, top_towers = find_tops_and_bottom(child_towers)
+bottom_tower = bottom_tower.pop()
+print bottom_tower # answer: eugwuhl
